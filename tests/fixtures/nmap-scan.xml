@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nmaprun>
+<nmaprun scanner="nmap" args="nmap -sn -T4 192.168.1.0/24" version="7.95" xmloutputversion="1.05">
+  <host>
+    <status state="up" reason="arp-response" reason_ttl="0"/>
+    <address addr="192.168.1.1" addrtype="ipv4"/>
+    <address addr="AA:BB:CC:DD:EE:01" addrtype="mac" vendor="Cisco Systems"/>
+    <hostnames/>
+    <times rtt="2000" to="100000" srtt="2000" rttvar="0"/>
+  </host>
+  <host>
+    <status state="up" reason="echo-reply" reason_ttl="64"/>
+    <address addr="192.168.1.100" addrtype="ipv4"/>
+    <address addr="AA:BB:CC:DD:EE:02" addrtype="mac" vendor="Dell Inc."/>
+    <hostnames>
+      <hostname name="server.local" type="PTR"/>
+    </hostnames>
+    <ports>
+      <port protocol="tcp" portid="22">
+        <state state="open" reason="syn-ack" reason_ttl="64"/>
+        <service name="ssh" product="OpenSSH" version="8.9p1 Ubuntu" extrainfo="Ubuntu Linux" tunnel="none" method="probed" conf="10"/>
+        <cpe>cpe:/a:openbsd:openssh:8.9p1</cpe>
+      </port>
+      <port protocol="tcp" portid="80">
+        <state state="open" reason="syn-ack" reason_ttl="64"/>
+        <service name="http" product="Apache httpd" version="2.4.52" extrainfo="Ubuntu" method="probed" conf="10"/>
+      </port>
+      <port protocol="tcp" portid="443">
+        <state state="open" reason="syn-ack" reason_ttl="64"/>
+        <service name="https" method="table" conf="3"/>
+      </port>
+    </ports>
+    <os>
+      <osmatch name="Linux 5.15" accuracy="95" line="123456">
+        <osclass type="general purpose" vendor="Linux" osfamily="Linux" osgen="5.X" accuracy="95">
+          <cpe>cpe:/o:linux:linux_kernel:5.15</cpe>
+        </osclass>
+      </osmatch>
+    </os>
+    <times rtt="5000" to="100000" srtt="5000" rttvar="0"/>
+  </host>
+  <host>
+    <status state="down" reason="no-response" reason_ttl="0"/>
+    <address addr="192.168.1.200" addrtype="ipv4"/>
+    <hostnames/>
+    <times rtt="0" to="100000" srtt="0" rttvar="0"/>
+  </host>
+  <runstats>
+    <finished time="1720000000" timestr="Sat Jun 28 2025" elapsed="2.50" summary="Nmap done at Sat Jun 28 2025" exit="success"/>
+    <hosts up="2" down="1" total="3"/>
+  </runstats>
+</nmaprun>

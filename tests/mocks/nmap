@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Mock nmap — outputs the ping scan fixture for discovery, fingerprint fixture for -A/-sV
+# Remember to: chmod +x tests/mocks/nmap
+FIXTURE_DIR="$(dirname "$0")/../fixtures"
+if echo "$*" | grep -qE "\-sV|\-A|\-O"; then
+  cat "${FIXTURE_DIR}/nmap-fingerprint.xml"
+else
+  cat "${FIXTURE_DIR}/nmap-scan.xml"
+fi

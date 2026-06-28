@@ -1,0 +1,892 @@
+Here is the complete technical specifications document formatted for clarity:
+
+# NetSentinel
+
+
+
+### Plateforme GUI de Pentest & Audit Réseau
+
+
+
+**Ubuntu 24.04 LTS · Cybersécurité × IA**
+
+
+**CAHIER DES CHARGES TECHNIQUE**
+
+
+**Version 1.0 — Juin 2025**
+
+
+*[ USAGE ÉDUCATIF & PROFESSIONNEL UNIQUEMENT ]*
+
+---
+
+## 1. Introduction & Vision du Projet
+
+
+
+NetSentinel est une application desktop native Ubuntu conçue pour démocratiser l'audit de sécurité réseau. Elle offre une interface graphique moderne et intuitive qui orchestre des outils de pentest de classe professionnelle (nmap, Wireshark, Metasploit, Burp Suite) sans que l'utilisateur ait besoin de saisir une seule commande.
+
+Ce projet s'inscrit dans une démarche d'apprentissage avancé à l'intersection de la Cybersécurité et de l'Intelligence Artificielle. L'IA est intégrée à chaque étape pour contextualiser les résultats, suggérer des vecteurs d'attaque, et automatiser la rédaction de rapports.
+
+### 1.1 Objectifs Stratégiques
+
+
+
+* Créer une interface 100% GUI : zéro commande terminale requise pour l'utilisateur final.
+
+
+* Couvrir le cycle complet d'un pentest : découverte, fingerprinting, capture trafic, interception active.
+
+
+* Intégrer des outils SOTA (State-of-the-Art) validés par la communauté professionnelle.
+
+
+* Générer automatiquement des rapports d'audit professionnels en PDF/DOCX.
+
+
+* Proposer une assistance IA contextuelle pour l'analyse et les recommandations.
+
+
+
+### 1.2 Avertissement Légal & Éthique
+
+
+
+> **⚖️ LÉGAL** : NetSentinel est exclusivement destiné à l'audit de réseaux dont vous êtes propriétaire ou pour lesquels vous disposez d'une autorisation écrite explicite. Toute utilisation non autorisée constitue une infraction pénale. Ce document est produit dans un cadre éducatif.
+> 
+> 
+
+---
+
+## 2. Contexte, Périmètre & Utilisateurs Cibles
+
+
+
+### 2.1 Contexte
+
+
+
+Les outils de sécurité réseau professionnels souffrent d'une courbe d'apprentissage très élevée : Nmap nécessite la maîtrise de dizaines d'options CLI, Wireshark requiert une expertise en protocoles réseau, Metasploit Framework impose la compréhension d'un système de modules complexe. NetSentinel abstrait cette complexité derrière une interface guidée, tout en exposant la puissance complète des outils sous-jacents.
+
+### 2.2 Utilisateurs Cibles
+
+
+
+| Profil | Description & Besoins |
+| --- | --- |
+| **Étudiant CyberSec** | Apprend les concepts de pentest avec feedback visuel immédiat et explications IA intégrées.
+
+ |
+| **Ingénieur Réseau** | Audite son propre réseau d'entreprise sans expertise offensive approfondie.
+
+ |
+| **Pentester Junior** | Accélère son workflow grâce à l'automatisation et à la génération de rapports.
+
+ |
+| **Chercheur Sécurité** | Reproduit des environnements de test et documente les découvertes rapidement.
+
+ |
+
+### 2.3 Périmètre Fonctionnel
+
+
+
+L'application couvre 4 phases de pentest réseau :
+
+| Phase | Nom | Outil Principal | Livrable UI |
+| --- | --- | --- | --- |
+| **Phase 1** | Scan & Cartographie | nmap / arp-scan | Carte réseau interactive avec cards par appareil.
+
+ |
+| **Phase 2** | Fingerprinting & Vulnérabilités | nmap -A / masscan | Rapport détaillé par appareil avec CVE associées.
+
+ |
+| **Phase 3** | Analyse de Trafic | tshark / Wireshark | Dashboard trafic temps réel avec alertes protocoles.
+
+ |
+| **Phase 4** | Interception MitM | mitmproxy / Burp Suite | Proxy intercepteur avec analyse de requêtes web.
+
+ |
+
+---
+
+## 3. Stack Technologique — Choix & Justifications
+
+
+
+Le choix technologique est contraint par deux impératifs : la compatibilité native Ubuntu 24.04 LTS et la capacité à piloter des outils système bas-niveau (capture réseau, injection de paquets). Voici le stack retenu :
+
+### 3.1 Frontend & Framework UI
+
+
+
+| Composant | Technologie | Rôle / Justification |
+| --- | --- | --- |
+| **Framework UI** | Electron 30 + React 18 | Cross-desktop natif Linux, accès Node.js pour les appels système, NPM ecosystem.
+
+ |
+| **Langage** | TypeScript 5.x | Typage statique pour fiabilité, autocomplete, meilleure maintenabilité du code.
+
+ |
+| **UI Components** | shadcn/ui + Tailwind CSS | Composants accessibles, design system cohérent, dark mode natif.
+
+ |
+| **Charts & Viz** | D3.js v7 + Recharts | Visualisation réseau interactive (graphe de topologie), courbes temps réel.
+
+ |
+| **State Manager** | Zustand + TanStack Query | État global léger, cache et synchronisation des données réseau.
+
+ |
+| **Animations** | Framer Motion | Transitions fluides pour les cards, dashboards et alertes temps réel.
+
+ |
+
+### 3.2 Backend & Orchestration
+
+
+
+| Composant | Technologie | Rôle / Justification |
+| --- | --- | --- |
+| **Runtime** | Node.js 22 LTS (Electron main) | Exécution de processus système, gestion des sockets Unix/TCP.
+
+ |
+| **Process Manager** | child_process + execa | Spawn nmap/tshark avec parsing stdout en temps réel via streams.
+
+ |
+| **Base de données** | SQLite 3 (better-sqlite3) | Stockage local des scans, historique, résultats fingerprinting — zéro serveur.
+
+ |
+| **API Interne** | IPC Electron (ipcMain/ipcRenderer) | Communication sécurisée entre frontend React et backend Node.js.
+
+ |
+| **Queue de tâches** | Bull + Redis (optionnel) | File d'attente pour scans simultanés, gestion des timeouts.
+
+ |
+
+### 3.3 Outils de Sécurité Intégrés (SOTA)
+
+
+
+| Composant | Technologie | Rôle / Justification |
+| --- | --- | --- |
+| **Scan Réseau** | nmap 7.95 + arp-scan | nmap : gold standard du scan réseau. arp-scan : plus rapide en LAN, détection MAC précise.
+
+ |
+| **Fingerprinting OS** | nmap -A + p0f | nmap -A : détection OS/services/scripts. p0f : fingerprinting passif (non intrusif).
+
+ |
+| **Capture Trafic** | tshark (CLI Wireshark) | tshark permet parsing programmatique JSON, idéal pour intégration dans l'UI.
+
+ |
+| **Proxy Web** | mitmproxy 10.x | API Python + WebSocket, plus facilement intégrable que Burp en standalone.
+
+ |
+| **Analyse CVE** | vulners NSE + NVD API | Script NSE vulners pour corrélation automatique avec la base CVE NIST.
+
+ |
+| **Analyse IA** | googlee gemini API | Contextualisation des résultats, suggestions d'exploitation, rédaction rapports.
+
+ |
+
+### 3.4 Environnement de Build & Distribution
+
+
+
+| Composant | Technologie | Rôle / Justification |
+| --- | --- | --- |
+| **Bundler** | Vite 5 + electron-vite | Build ultra-rapide, HMR en dev, optimisation prod.
+
+ |
+| **Packaging** | electron-builder | Génère .deb, .AppImage, .snap pour Ubuntu — installation en un clic.
+
+ |
+| **Containerisation** | Docker (dev env) | Environnement de développement reproductible, tests isolés.
+
+ |
+| **CI/CD** | GitHub Actions | Tests automatiques, build multi-arch, release automatisée.
+
+ |
+| **Tests** | Vitest + Playwright | Tests unitaires + E2E pour les workflows de scan.
+
+ |
+
+---
+
+## 4. Architecture Système
+
+
+
+### 4.1 Architecture Globale
+
+
+
+NetSentinel suit une architecture 3-tiers adaptée à Electron :
+
+* **COUCHE 1** : Renderer Process (React/TypeScript) : Interface utilisateur, visualisations, gestion de l'état UI.
+
+
+* **COUCHE 2** : Main Process (Node.js) : Orchestrateur système, spawn des outils, parsing des résultats, SQLite.
+
+
+* **COUCHE 3** : Outils Système (nmap/tshark/mitmproxy) : Exécutés en processus enfants avec permissions root via pkexec.
+
+
+
+### 4.2 Gestion des Permissions Root
+
+
+
+Les outils de sécurité réseau nécessitent des privilèges root (capture de paquets, scan SYN). NetSentinel gère cela via :
+
+* pkexec (PolicyKit) pour les élévations ponctuelles avec boîte de dialogue graphique Ubuntu.
+
+
+* Capabilities Linux (`cap_net_raw`, `cap_net_admin`) assignées aux binaires via setcap.
+
+
+* Jamais de lancement global en root de l'application complète.
+
+
+
+### 4.3 Flux de Données
+
+
+
+| Étape | Description du Flux |
+| --- | --- |
+| **1. Saisie UI** | L'utilisateur configure un scan via l'interface React (plage IP, options).
+
+ |
+| **2. IPC Call** | Le Renderer envoie une commande IPC au Main Process avec les paramètres.
+
+ |
+| **3. Spawn Tool** | Le Main Process lance nmap/tshark via execa avec parsing stream JSON.
+
+ |
+| **4. Real-time Push** | Les résultats sont streamés ligne par ligne vers le Renderer via IPC events.
+
+ |
+| **5. Persistence** | Chaque résultat est sauvegardé en SQLite pour historique et rapports.
+
+ |
+| **6. AI Analysis** | Les données brutes sont envoyées à l'API gemini pour contextualisation.
+
+ |
+| **7. Render** | Le Renderer affiche les cards, graphes et alertes en temps réel.
+
+ |
+
+---
+
+## 5. Spécifications Fonctionnelles Détaillées
+
+
+
+### 5.1 Phase 1 — Scan & Cartographie Réseau
+
+
+
+#### 5.1.1 Description Fonctionnelle
+
+
+
+L'utilisateur lance un scan de découverte sur sa plage réseau. L'application détecte tous les appareils connectés et les affiche sous forme de cartes visuelles interactives sur une vue "Network Map".
+
+#### 5.1.2 Interface Utilisateur — Network Map
+
+
+
+* **Vue principale** : grille de cards avec animation d'apparition au fur et à mesure de la découverte.
+
+
+* **Card Appareil** : icône selon le type (router, smartphone, PC, caméra IoT, serveur, inconnu).
+
+
+* **Contenu de la card** : adresse IP, hostname, fabricant (vendor MAC), type d'appareil, statut (online/offline), temps de réponse ping.
+
+
+* **Filtres** : par type d'appareil, par sous-réseau, par statut.
+
+
+* **Vue alternative** : topologie réseau (graphe D3.js) montrant les connexions.
+
+
+* **Badge temps réel** : compteur d'appareils découverts pendant le scan.
+
+
+
+#### 5.1.3 Outils & Commandes Orchestrées
+
+
+
+| Outil | Usage & Paramètres |
+| --- | --- |
+| **nmap -sn** | Ping scan rapide : `nmap -sn --min-rate=1000 192.168.1.0/24 -oX -`<br> |
+| **arp-scan** | Scan ARP LAN ultra-rapide : `arp-scan --localnet --interface=eth0`<br> |
+| **nmap -sV** | Détection des ports ouverts principaux (ports 22,80,443,8080).
+
+ |
+| **OUI Lookup** | Requête base MAC-vendor locale (IEEE OUI database) pour identifier le fabricant.
+
+ |
+
+#### 5.1.4 Parsing & Enrichissement
+
+
+
+* Parse XML nmap en temps réel avec xml2js pour mise à jour progressive des cards.
+
+
+* Lookup OUI automatique depuis la base de données locale (ieee-mac-vendor npm).
+
+
+* Classification automatique du type d'appareil via heuristiques : ports ouverts + vendor + hostname.
+
+
+* Géolocalisation optionnelle des IPs publiques via ip-api.com.
+
+
+
+### 5.2 Phase 2 — Fingerprinting & Analyse de Vulnérabilités
+
+
+
+#### 5.2.1 Description Fonctionnelle
+
+
+
+En cliquant sur une card de la Phase 1, l'utilisateur lance un fingerprinting approfondi de l'appareil sélectionné. Un panneau latéral (drawer) ou une vue détail s'ouvre et se remplit progressivement pendant le scan.
+
+#### 5.2.2 Interface Utilisateur — Device Detail View
+
+
+
+* Panneau latéral droit animé (slide-in) au clic sur une card.
+
+
+* **Onglets** : Aperçu / Ports & Services / OS Detection / Vulnérabilités / IA Analysis.
+
+
+* **Onglet Ports** : liste des ports ouverts avec service, version, protocole et état.
+
+
+* **Onglet OS** : OS détecté avec score de confiance, kernel estimé, architecture.
+
+
+* **Onglet Vulnérabilités** : liste des CVE avec score CVSS, sévérité (badge coloré), description et lien NVD.
+
+
+* **Onglet IA** : analyse de gemini expliquant les risques en langage naturel et recommandations de remédiation.
+
+
+
+#### 5.2.3 Outils & Commandes Orchestrées
+
+
+
+| Outil | Usage |
+| --- | --- |
+| **nmap -A** | Détection OS + versions services + scripts NSE par défaut sur l'IP cible.
+
+ |
+| **nmap --script vulners** | Corrélation automatique des services détectés avec la base CVE via le script NSE vulners.
+
+ |
+| **p0f** | Fingerprinting passif (observation du trafic existant, non intrusif).
+
+ |
+| **NVD API v2.0** | Enrichissement CVE : score CVSS, vecteur d'attaque, disponibilité des patches.
+
+ |
+| **gemini API** | Analyse contextuelle : expliquer les CVE, prioriser les risques, rédiger recommandations.
+
+ |
+
+### 5.3 Phase 3 — Analyse de Trafic Réseau
+
+
+
+#### 5.3.1 Description Fonctionnelle
+
+
+
+L'utilisateur active la capture de trafic sur une interface réseau choisie. L'application analyse le trafic en temps réel et identifie les protocoles non chiffrés, les credentials en clair et les patterns suspects.
+
+#### 5.3.2 Interface Utilisateur — Traffic Dashboard
+
+
+
+* Sélecteur d'interface réseau (dropdown : eth0, wlan0, etc.).
+
+
+* Bouton START/STOP capture avec indicateur visuel (pulsing dot rouge).
+
+
+* Graphique temps réel : débit réseau par protocole (HTTP, HTTPS, DNS, FTP, Telnet...).
+
+
+* Feed de paquets : liste scrollable des paquets capturés avec coloration syntaxique par protocole.
+
+
+* Panneau Alertes : notifications immédiates pour protocoles non chiffrés détectés.
+
+
+* Extracteur Credentials : tableau dédié affichant usernames/passwords en clair interceptés.
+
+
+* Filtre BPF intégré : champ de saisie pour filtres Wireshark (ex: `http and tcp.port==80`).
+
+
+
+#### 5.3.3 Outils & Commandes Orchestrées
+
+
+
+| Outil | Usage |
+| --- | --- |
+| **tshark** | Capture et parsing en JSON temps réel : `tshark -i wlan0 -T json -l`<br> |
+| **tshark -Y** | Filtrage applicatif : `tshark -Y 'ftp or telnet or http'` pour protocoles non chiffrés.
+
+ |
+| **tshark -z** | Statistiques agrégées : `io,stat` pour graphiques débit, `conv,tcp` pour connexions.
+
+ |
+| **dsniff** | Extraction automatique de credentials en clair (FTP, Telnet, HTTP Basic Auth).
+
+ |
+| **NetworkMiner** | Reconstruction de fichiers transférés (images, documents) depuis le trafic capturé.
+
+ |
+
+### 5.4 Phase 4 — Interception Active (Man-in-the-Middle)
+
+
+
+#### 5.4.1 Description Fonctionnelle
+
+
+
+L'utilisateur configure un proxy d'interception entre une machine cible et le réseau. Il peut visualiser, modifier et rejouer les requêtes HTTP/HTTPS. L'IA analyse les requêtes pour détecter des failles XSS, SQLi et autres vulnérabilités web.
+
+#### 5.4.2 Interface Utilisateur — Proxy Interceptor
+
+
+
+* Configuration guidée ARP Spoofing : sélection IP cible et IP gateway avec explications.
+
+
+* Vue Requêtes/Réponses : split-view avec liste des requêtes à gauche, détail à droite.
+
+
+* Editeur de requêtes intégré : modification des headers, body, cookies avec syntaxe highlighting.
+
+
+* Bouton Rejouer : re-envoyer une requête modifiée et voir la réponse différentielle.
+
+
+* Scanner automatique : bouton 'Analyser avec IA' pour détecter SQLi/XSS/SSRF dans les paramètres.
+
+
+* Timeline : vue chronologique de la session avec regroupement par domaine.
+
+
+
+#### 5.4.3 Outils & Commandes Orchestrées
+
+
+
+| Outil | Usage |
+| --- | --- |
+| **mitmproxy 10.x** | Proxy HTTP/HTTPS avec API WebSocket pour intégration temps réel dans l'UI.
+
+ |
+| **arpspoof / ettercap** | ARP Poisoning pour rediriger le trafic de la cible vers la machine attaquante.
+
+ |
+| **sslstrip2** | Downgrade HTTPS vers HTTP pour les sites non HSTS.
+
+ |
+| **gemini API** | Analyse des paramètres GET/POST pour détection de patterns SQLi, XSS, Path Traversal.
+
+ |
+
+---
+
+## 6. Fonctionnalités Transverses
+
+
+
+### 6.1 Assistant IA Intégré (gemini API)
+
+
+
+Un chatbot contextuel est accessible depuis chaque vue via un panneau flottant. Il a accès aux données du scan en cours pour répondre à des questions comme 'Quel est le risque principal de cet appareil ?' ou 'Comment exploiter cette CVE en lab ?'.
+
+* **Mode Explication** : vulgarise les résultats techniques pour les apprenants.
+
+
+* **Mode Expert** : fournit des payloads, commandes et vecteurs d'attaque pour les pentesteurs.
+
+
+* **Rédaction Rapport** : génère automatiquement un résumé exécutif du pentest.
+
+
+
+### 6.2 Système de Rapports
+
+
+
+* **Export PDF** : rapport complet avec logo, executive summary, findings, recommandations.
+
+
+* **Export DOCX** : format éditable pour personnalisation client.
+
+
+* **Template personnalisable** : logo, nom de l'entreprise, couleurs.
+
+
+* **Scoring de risque automatique** : calcul d'un Risk Score global basé sur les CVE et configurations.
+
+
+
+### 6.3 Gestion de Sessions & Historique
+
+
+
+* Sauvegarde automatique de chaque session en SQLite avec timestamp.
+
+
+* **Vue Historique** : liste de toutes les sessions passées avec comparaison delta.
+
+
+* **Export de session** : partage des résultats entre collaborateurs (`.netsent` format JSON).
+
+
+
+### 6.4 Interface & UX
+
+
+
+* **Thème** : dark mode exclusif avec palette cybersécurité (bleu navy, rouge accent, vert teal).
+
+
+* **Responsive** : s'adapte à différentes résolutions (1280x720 minimum).
+
+
+* **Notifications** : système de toasts pour alertes réseau, progression des scans.
+
+
+* **Raccourcis clavier** : navigation rapide entre phases, lancement scan, export.
+
+
+* **Aide contextuelle** : tooltips et documentation inline à chaque étape.
+
+
+
+---
+
+## 7. Exigences Non Fonctionnelles
+
+
+
+### 7.1 Performance
+
+
+
+| Critère | Exigence |
+| --- | --- |
+| **Démarrage application** | < 3 secondes sur SSD standard.
+
+ |
+| **Affichage premier résultat scan** | < 2 secondes après lancement du scan.
+
+ |
+| **Latence UI temps réel** | Mise à jour des graphiques trafic < 500ms.
+
+ |
+| **Scan réseau /24** | < 30 secondes pour 254 hôtes (mode ping scan).
+
+ |
+| **Fingerprinting** | < 2 minutes par appareil (nmap -A complet).
+
+ |
+
+### 7.2 Compatibilité Système
+
+
+
+| Critère | Spécification |
+| --- | --- |
+| **OS cible** | Ubuntu 24.04 LTS (Noble Numbat) — support primaire.
+
+ |
+| **OS secondaires** | Ubuntu 22.04 LTS, Debian 12, Linux Mint 22 (non garanti).
+
+ |
+| **Architecture** | x86_64 uniquement (v1.0).
+
+ |
+| **RAM minimale** | 4 Go (8 Go recommandés pour capture trafic intensive).
+
+ |
+| **Espace disque** | 500 Mo application + espace variable pour captures pcap.
+
+ |
+| **Réseau** | Interface ethernet ou Wi-Fi compatible mode promiscuous.
+
+ |
+| **Kernel** | Linux >= 5.15 (pour eBPF optionnel).
+
+ |
+
+### 7.3 Sécurité de l'Application
+
+
+
+* Aucune donnée envoyée vers des serveurs externes sauf API gemini (opt-in).
+
+
+* Clés API stockées dans le keyring système Ubuntu (libsecret).
+
+
+* Chiffrement AES-256 de la base SQLite avec mot de passe utilisateur.
+
+
+* Sandbox Electron activé avec contextIsolation et nodeIntegration désactivé.
+
+
+* Validation et sanitization de toutes les entrées utilisateur avant construction de commandes système.
+
+
+
+---
+
+## 8. Installation & Déploiement Ubuntu 24.04
+
+
+
+### 8.1 Prérequis Système
+
+
+
+* Node.js >= 22 LTS : installation via nvm ou NodeSource PPA.
+
+
+* nmap >= 7.94 : `sudo apt install nmap`
+
+* tshark >= 4.2 : `sudo apt install tshark` (groupe wireshark).
+
+
+* arp-scan : `sudo apt install arp-scan`
+
+* mitmproxy >= 10.0 : installation via pipx.
+
+
+* Python >= 3.12 (pour mitmproxy et scripts auxiliaires).
+
+
+
+### 8.2 Formats de Distribution
+
+
+
+| Format | Usage & Avantages |
+| --- | --- |
+| **.deb (Recommandé)** | Installation native apt, gestion dépendances automatique, intégration menu Ubuntu.
+
+ |
+| **.AppImage** | Portable, aucune installation requise, exécutable directement.
+
+ |
+| **.snap** | Distribution via Snap Store, mises à jour automatiques, sandboxing.
+
+ |
+| **Source (GitHub)** | Pour développeurs : `clone` + `npm install` + `npm run build`.
+
+ |
+
+### 8.3 Script d'Installation Automatique
+
+
+
+Un script `install.sh` sera fourni pour configurer automatiquement tous les prérequis, les permissions (capabilities réseau), les groupes utilisateur (wireshark), et lancer l'application pour la première fois.
+
+---
+
+## 9. Planning & Roadmap
+
+
+
+| Milestone | Contenu & Durée estimée |
+| --- | --- |
+| **M1 — Setup (Sem 1-2)** | Scaffolding Electron+React+TypeScript, structure projet, CI/CD, thème dark.
+
+ |
+| **M2 — Phase 1 UI (Sem 3-4)** | Network Map, cards appareils, intégration nmap -sn, parsing XML temps réel.
+
+ |
+| **M3 — Phase 2 UI (Sem 5-6)** | Device Detail View, fingerprinting nmap -A, corrélation CVE, onglet IA.
+
+ |
+| **M4 — Phase 3 UI (Sem 7-8)** | Traffic Dashboard, intégration tshark, graphes temps réel, alertes protocoles.
+
+ |
+| **M5 — Phase 4 UI (Sem 9-10)** | Proxy Interceptor, mitmproxy WebSocket, éditeur requêtes, scanner IA.
+
+ |
+| **M6 — Transversal (Sem 11-12)** | Système rapports PDF/DOCX, historique sessions, assistant IA chatbot.
+
+ |
+| **M7 — Polish & Release (Sem 13-14)** | Tests E2E, optimisation perf, packaging .deb/.AppImage, documentation.
+
+ |
+
+---
+
+## 10. Risques & Mitigations
+
+
+
+| Risque | Mitigation |
+| --- | --- |
+| **Permissions root complexes** | Utiliser pkexec + setcap dès le setup, documenter précisément.
+
+ |
+| **Performance tshark en temps réel** | Sampling des paquets, agrégation côté Main Process, rendu virtualisé React.
+
+ |
+| **Dépendances système manquantes** | Script de vérification au démarrage avec guide d'installation automatique.
+
+ |
+| **API gemini rate limiting** | Cache des analyses IA, queue de requêtes, fallback mode offline.
+
+ |
+| **Compatibilité Wi-Fi mode monitor** | Détecter les capacités de l'interface, afficher avertissement si non supporté.
+
+ |
+| **mitmproxy API instable** | Tests sur version fixée, wrapper Python d'abstraction.
+
+ |
+| **Taille bundle Electron** | Code splitting, lazy loading des phases, compression assets.
+
+ |
+
+---
+
+## 11. Glossaire
+
+
+
+| Terme | Définition |
+| --- | --- |
+| **SOTA** | State-of-the-Art : désigne les outils les plus avancés et reconnus du domaine.
+
+ |
+| **Pentest** | Penetration Testing : test d'intrusion autorisé pour identifier les vulnérabilités.
+
+ |
+| **Fingerprinting** | Identification précise d'un système (OS, versions logicielles, services).
+
+ |
+| **CVE** | Common Vulnerabilities and Exposures : identifiant standardisé de vulnérabilités connues.
+
+ |
+| **CVSS** | Common Vulnerability Scoring System : score de sévérité d'une vulnérabilité (0-10).
+
+ |
+| **MitM** | Man-in-the-Middle : attaque positionnant l'attaquant entre deux communicants.
+
+ |
+| **ARP Spoofing** | Empoisonnement du cache ARP pour rediriger le trafic réseau.
+
+ |
+| **IPC** | Inter-Process Communication : communication entre le main et renderer d'Electron.
+
+ |
+| **OUI** | Organizationally Unique Identifier : 3 premiers octets d'une adresse MAC identifiant le fabricant.
+
+ |
+| **BPF** | Berkeley Packet Filter : langage de filtrage de paquets réseau (utilisé par Wireshark/tshark).
+
+ |
+| **NSE** | Nmap Scripting Engine : système de scripts pour étendre les capacités de nmap.
+
+ |
+
+---
+
+## Annexes
+
+
+
+### A. Dépendances NPM Principales
+
+
+
+| Composant | Technologie | Rôle / Justification |
+| --- | --- | --- |
+| **electron** | `^30.0.0` | Framework desktop cross-platform.
+
+ |
+| **electron-vite** | `^2.3.0` | Build tooling optimisé pour Electron.
+
+ |
+| **react** | `^18.3.0` | Framework UI.
+
+ |
+| **typescript** | `^5.5.0` | Typage statique.
+
+ |
+| **tailwindcss** | `^3.4.0` | CSS utilitaire.
+
+ |
+| **@shadcn/ui** | latest | Composants UI accessibles.
+
+ |
+| **d3** | `^7.9.0` | Visualisation graphes réseau.
+
+ |
+| **recharts** | `^2.12.0` | Graphiques temps réel.
+
+ |
+| **framer-motion** | `^11.3.0` | Animations UI.
+
+ |
+| **zustand** | `^4.5.0` | State management.
+
+ |
+| **better-sqlite3** | `^11.0.0` | Base de données locale.
+
+ |
+| **execa** | `^9.3.0` | Spawn processus système.
+
+ |
+| **xml2js** | `^0.6.0` | Parsing XML nmap.
+
+ |
+| **@anthropic-ai/sdk** | `^0.24.0` | Client API gemini.
+
+ |
+
+### B. Références & Documentation
+
+
+
+* **Nmap Reference Guide** : [https://nmap.org/book/](https://nmap.org/book/)
+
+* **tshark Manual** : [https://www.wireshark.org/docs/man-pages/tshark.html](https://www.wireshark.org/docs/man-pages/tshark.html)
+
+* **mitmproxy Docs** : [https://docs.mitmproxy.org/](https://docs.mitmproxy.org/)
+
+* **Electron Security** : [https://www.electronjs.org/docs/latest/tutorial/security](https://www.electronjs.org/docs/latest/tutorial/security)
+
+* **NVD API v2.0** : [https://nvd.nist.gov/developers/vulnerabilities](https://nvd.nist.gov/developers/vulnerabilities)
+
+* **OWASP Testing Guide v4.2** : [https://owasp.org/www-project-web-security-testing-guide/](https://owasp.org/www-project-web-security-testing-guide/)
+
+* **Anthropic API Docs** : [https://docs.anthropic.com/](https://www.google.com/search?q=https://docs.anthropic.com/)
+
+
+— Fin du Cahier des Charges NetSentinel v1.0 —
+Document généré pour usage éducatif — Cybersécurité × Intelligence Artificielle

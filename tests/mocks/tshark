@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Mock tshark — outputs EK NDJSON fixture then exits
+# Remember to: chmod +x tests/mocks/tshark
+FIXTURE_DIR="$(dirname "$0")/../fixtures"
+cat "${FIXTURE_DIR}/tshark-ek.ndjson"

@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-navy text-slate-100;
+  }
+  
+  /* Scrollbar styles for dark theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-navy-600 rounded-full border-2 border-solid border-navy-900;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-navy-500;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-panel/70 backdrop-blur-md border border-white/5;
+  }
+  .glass-panel {
+    @apply bg-panel-dark/80 backdrop-blur-lg border border-white/10 shadow-panel;
+  }
+  .text-glow {
+    text-shadow: 0 0 10px currentColor;
+  }
+}

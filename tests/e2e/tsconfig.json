@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "lib": ["ES2022", "DOM"],
+    // Relax strictness for test files — any-typed evaluate callbacks are intentional
+    "strict": false,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    // Resolve @shared/* so the NetSentinelAPI type and its transitive imports work
+    "baseUrl": "../..",
+    "paths": {
+      "@shared/*": ["src/shared/*"]
+    },
+    "resolveJsonModule": true
+  },
+  "include": ["./**/*.ts"]
+}

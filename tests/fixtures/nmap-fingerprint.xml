@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nmaprun>
+<nmaprun scanner="nmap" args="nmap -sV -O --script vuln,default 192.168.1.100" version="7.95" xmloutputversion="1.05">
+  <host>
+    <status state="up" reason="echo-reply" reason_ttl="64"/>
+    <address addr="192.168.1.100" addrtype="ipv4"/>
+    <address addr="AA:BB:CC:DD:EE:02" addrtype="mac" vendor="Dell Inc."/>
+    <hostnames>
+      <hostname name="server.local" type="PTR"/>
+    </hostnames>
+    <ports>
+      <port protocol="tcp" portid="22">
+        <state state="open" reason="syn-ack" reason_ttl="64"/>
+        <service name="ssh" product="OpenSSH" version="8.9p1 Ubuntu" extrainfo="protocol 2.0" method="probed" conf="10"/>
+      </port>
+      <port protocol="tcp" portid="80">
+        <state state="open" reason="syn-ack" reason_ttl="64"/>
+        <service name="http" product="Apache httpd" version="2.4.49" extrainfo="Ubuntu" method="probed" conf="10"/>
+      </port>
+      <port protocol="tcp" portid="443">
+        <state state="open" reason="syn-ack" reason_ttl="64"/>
+        <service name="https" product="Apache httpd" version="2.4.49" method="probed" conf="10"/>
+        <script id="http-vuln-cve2021-41773" output="VULNERABLE: Apache HTTP Server 2.4.49 Path Traversal">
+          <table key="CVE-2021-41773">
+            <elem key="title">Apache HTTP Server 2.4.49 Path Traversal and RCE</elem>
+            <elem key="state">VULNERABLE (Exploitable)</elem>
+            <elem key="risk_factor">high</elem>
+            <elem key="ids">CVE-2021-41773</elem>
+            <elem key="description">A flaw in Apache HTTP Server 2.4.49 allows path traversal attacks and potentially RCE if mod_cgi is enabled.</elem>
+          </table>
+        </script>
+      </port>
+    </ports>
+    <os>
+      <osmatch name="Linux 5.15" accuracy="96" line="123456">
+        <osclass type="general purpose" vendor="Linux" osfamily="Linux" osgen="5.X" accuracy="96">
+          <cpe>cpe:/o:linux:linux_kernel:5.15</cpe>
+        </osclass>
+      </osmatch>
+    </os>
+    <times rtt="5000" to="100000" srtt="5000" rttvar="0"/>
+  </host>
+  <runstats>
+    <finished time="1720000060" timestr="Sat Jun 28 2025" elapsed="60.00" summary="Nmap done" exit="success"/>
+    <hosts up="1" down="0" total="1"/>
+  </runstats>
+</nmaprun>
