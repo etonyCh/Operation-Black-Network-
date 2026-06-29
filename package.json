@@ -4,7 +4,7 @@
   "description": "Network penetration testing & security audit desktop application",
   "main": "out/main/index.js",
   "homepage": "https://github.com/black-network/black-network",
-  "author": "Black Network",
+  "author": "Tony Charmant <contact@tonycharmant.com>",
   "license": "MIT",
   "scripts": {
     "dev": "electron-vite dev",
@@ -79,7 +79,14 @@
         "AppImage"
       ],
       "category": "Network",
-      "maintainer": "Black Network"
+      "maintainer": "Tony Charmant <contact@tonycharmant.com>",
+      "vendor": "Tony Charmant",
+      "description": "Network penetration testing & security audit desktop application",
+      "desktop": {
+        "Name": "Black Network",
+        "Comment": "Network penetration testing & security audit desktop application",
+        "Type": "Application"
+      }
     },
     "deb": {
       "depends": [
