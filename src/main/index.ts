@@ -74,20 +74,35 @@ app.whenReady().then(async () => {
   // Setup permissions with sudo-prompt if running on linux
   if (process.platform === 'linux' && process.env.NODE_ENV !== 'test') {
     try {
-      const sudo = require('sudo-prompt')
-      const options = {
-        name: 'Black Network',
-      }
-      // Give cap_net_raw and cap_net_admin to nmap and tshark to run without root
-      const cmd = 'setcap cap_net_raw,cap_net_admin,cap_dac_override+eip /usr/bin/nmap && setcap cap_net_raw,cap_net_admin+eip /usr/bin/tshark && setcap cap_net_raw,cap_net_admin+eip /usr/bin/dumpcap'
-      logger.info('Requesting sudo permissions to setcap for nmap and tshark...')
-      sudo.exec(cmd, options, (error: Error | undefined, stdout: string, stderr: string) => {
-        if (error) {
-          logger.warn(`Sudo prompt failed: ${error}`)
-        } else {
-          logger.info(`Sudo prompt success. ${stdout} ${stderr}`)
+      const { execSync } = require('child_process')
+      let needsSetcap = false
+      try {
+        const caps = execSync('getcap /usr/bin/dumpcap /usr/bin/nmap', { encoding: 'utf-8' })
+        if (!caps.includes('cap_net_raw') || !caps.includes('/usr/bin/dumpcap') || !caps.includes('/usr/bin/nmap')) {
+          needsSetcap = true
         }
-      })
+      } catch (e) {
+        needsSetcap = true
+      }
+
+      if (needsSetcap) {
+        const sudo = require('sudo-prompt')
+        const options = {
+          name: 'Black Network',
+        }
+        // Give cap_net_raw and cap_net_admin to nmap and tshark to run without root
+        const cmd = 'setcap cap_net_raw,cap_net_admin,cap_dac_override+eip /usr/bin/nmap && setcap cap_net_raw,cap_net_admin+eip /usr/bin/tshark && setcap cap_net_raw,cap_net_admin+eip /usr/bin/dumpcap'
+        logger.info('Capabilities missing. Requesting sudo permissions to setcap...')
+        sudo.exec(cmd, options, (error: Error | undefined, stdout: string, stderr: string) => {
+          if (error) {
+            logger.warn(`Sudo prompt failed: ${error}`)
+          } else {
+            logger.info(`Sudo prompt success. ${stdout} ${stderr}`)
+          }
+        })
+      } else {
+        logger.info('Required network capabilities (setcap) are already present.')
+      }
     } catch (e) {
       logger.error(`Failed to execute sudo-prompt: ${e}`)
     }

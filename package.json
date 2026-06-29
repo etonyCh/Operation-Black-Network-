@@ -104,8 +104,12 @@
       "depends": [
         "nmap",
         "tshark",
-        "arp-scan"
-      ]
+        "wireshark-common",
+        "arp-scan",
+        "dsniff",
+        "mitmproxy"
+      ],
+      "afterInstall": "build/linux/after-install.sh"
     },
     "files": [
       "out/**/*",
