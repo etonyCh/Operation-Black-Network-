@@ -99,7 +99,7 @@ export function NetworkMapPage() {
             <option value="quick">Quick Discovery</option>
             <option value="normal">Normal Scan</option>
             <option value="aggressive">Aggressive (OS+Ports)</option>
-            <option value="ai-deep">AI Deep Discovery (SOTA)</option>
+            <option value="ai-deep">Deep Discovery (Orchestrated)</option>
           </select>
           {isScanning ? (
             <Button variant="destructive" onClick={handleStopScan}>

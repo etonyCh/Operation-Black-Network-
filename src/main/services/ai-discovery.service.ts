@@ -57,26 +57,26 @@ class AiDiscoveryService {
     const runPhases = async () => {
       // PHASE 1: mDNS
       if (isStopped) return
-      emitter.emit('progress', { phase: 'mDNS', percent: 10, message: 'AI: Broadcasting mDNS probes to wake up Apple/Android devices...' })
+      emitter.emit('progress', { phase: 'mDNS', percent: 10, message: 'Broadcasting mDNS probes to wake up Apple/Android devices...' })
       await this.runMdns(addDevice)
 
       // PHASE 2: SSDP
       if (isStopped) return
-      emitter.emit('progress', { phase: 'SSDP', percent: 30, message: 'AI: Sweeping network for UPnP/IoT endpoints...' })
+      emitter.emit('progress', { phase: 'SSDP', percent: 30, message: 'Sweeping network for UPnP/IoT endpoints...' })
       await this.runSsdp(addDevice)
 
       // PHASE 3: Passive Tshark
       if (isStopped) return
-      emitter.emit('progress', { phase: 'Passive', percent: 50, message: 'AI: Listening passively to bypass endpoint firewalls (8s)...' })
+      emitter.emit('progress', { phase: 'Passive', percent: 50, message: 'Listening passively to bypass endpoint firewalls (8s)...' })
       await this.runPassiveSniffing(addDevice)
 
       // PHASE 4: Deep Nmap
       if (isStopped) return
-      emitter.emit('progress', { phase: 'Nmap', percent: 70, message: 'AI: Initiating Deep Host Discovery (TCP/UDP/ICMP/ARP)...' })
+      emitter.emit('progress', { phase: 'Nmap', percent: 70, message: 'Initiating Deep Host Discovery (TCP/UDP/ICMP/ARP)...' })
       await this.runDeepNmap(scanId, sessionId, options, addDevice, emitter)
       
       if (isStopped) return
-      emitter.emit('progress', { phase: 'Complete', percent: 100, message: 'AI: Deep discovery complete.' })
+      emitter.emit('progress', { phase: 'Complete', percent: 100, message: 'Deep discovery complete.' })
       emitter.emit('complete', Array.from(discoveredDevices.values()))
     }
 
@@ -202,7 +202,7 @@ class AiDiscoveryService {
         addDevice(d.ip, d)
       })
       nmapEmitter.on('progress', (p: any) => {
-        emitter.emit('progress', { phase: 'Nmap', percent: 70 + (p.percent > 0 ? p.percent * 0.25 : 0), message: 'AI: Deep Host Discovery in progress...' })
+        emitter.emit('progress', { phase: 'Nmap', percent: 70 + (p.percent > 0 ? p.percent * 0.25 : 0), message: 'Deep Host Discovery in progress...' })
       })
       nmapEmitter.on('complete', () => resolve())
       nmapEmitter.on('error', (err: any) => reject(err))
