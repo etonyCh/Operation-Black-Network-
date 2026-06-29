@@ -69,6 +69,7 @@ class NmapService {
   ): ScanEmitter {
     const emitter = new EventEmitter() as ScanEmitter
     const args = [
+      '--privileged',
       '-sV',
       '--version-intensity',
       '5',
@@ -130,7 +131,7 @@ class NmapService {
   }
 
   private buildDiscoveryArgs(options: ScanOptions): string[] {
-    const args: string[] = ['--stats-every', '5s', '-oX', '-']
+    const args: string[] = ['--privileged', '--stats-every', '5s', '-oX', '-']
 
     switch (options.mode) {
       case 'quick':
