@@ -79,7 +79,7 @@ app.whenReady().then(async () => {
         name: 'Black Network',
       }
       // Give cap_net_raw and cap_net_admin to nmap and tshark to run without root
-      const cmd = 'setcap cap_net_raw,cap_net_admin,cap_dac_override+eip /usr/bin/nmap && setcap cap_net_raw,cap_net_admin+eip /usr/bin/tshark'
+      const cmd = 'setcap cap_net_raw,cap_net_admin,cap_dac_override+eip /usr/bin/nmap && setcap cap_net_raw,cap_net_admin+eip /usr/bin/tshark && setcap cap_net_raw,cap_net_admin+eip /usr/bin/dumpcap'
       logger.info('Requesting sudo permissions to setcap for nmap and tshark...')
       sudo.exec(cmd, options, (error: Error | undefined, stdout: string, stderr: string) => {
         if (error) {
