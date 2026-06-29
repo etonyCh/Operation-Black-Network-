@@ -36,6 +36,7 @@ export const IPC = {
   SESSION_CREATE: 'session:create',
   SESSION_LIST: 'session:list',
   SESSION_GET: 'session:get',
+  SESSION_GET_DEVICES: 'session:get-devices',
   SESSION_UPDATE: 'session:update',
   SESSION_DELETE: 'session:delete',
   SESSION_EXPORT: 'session:export',

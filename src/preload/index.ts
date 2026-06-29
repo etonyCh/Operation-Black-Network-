@@ -90,6 +90,8 @@ contextBridge.exposeInMainWorld('api', {
 
   getSession: (id: string) => ipcRenderer.invoke(IPC.SESSION_GET, { id }),
 
+  getSessionDevices: (id: string) => ipcRenderer.invoke(IPC.SESSION_GET_DEVICES, { id }),
+
   updateSession: (id: string, data: unknown) =>
     ipcRenderer.invoke(IPC.SESSION_UPDATE, { id, data }),
 

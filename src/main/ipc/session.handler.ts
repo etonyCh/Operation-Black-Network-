@@ -58,6 +58,22 @@ export function registerSessionHandlers(ipcMain: IpcMain): void {
     }
   })
 
+  // ── get devices ──────────────────────────────────────────────────────────────
+  ipcMain.handle(IPC.SESSION_GET_DEVICES, async (_event, payload: { id: string }) => {
+    try {
+      const devices = deviceRepo.findBySessionId(payload.id)
+      const vulns = vulnRepo.findBySessionId(payload.id)
+      // Attach vulns to devices for easy frontend consumption
+      const devicesWithVulns = devices.map(d => ({
+        ...d,
+        vulnerabilities: vulns.filter(v => v.deviceId === d.id)
+      }))
+      return { success: true, devices: devicesWithVulns }
+    } catch (err) {
+      return { success: false, error: err instanceof Error ? err.message : String(err) }
+    }
+  })
+
   // ── update ───────────────────────────────────────────────────────────────────
   ipcMain.handle(
     IPC.SESSION_UPDATE,
