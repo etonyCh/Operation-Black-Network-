@@ -1,11 +1,11 @@
 {
   "name": "black-network",
   "version": "0.1.0",
-  "description": "Network penetration testing & security audit desktop application",
+  "description": "Black Network is a state-of-the-art, comprehensive network penetration testing and security auditing platform. Designed for cybersecurity professionals, it integrates advanced traffic analysis, vulnerability scanning, and real-time network intelligence into an intuitive desktop environment.",
   "main": "out/main/index.js",
   "homepage": "https://github.com/black-network/black-network",
-  "author": "Tony Charmant <contact@tonycharmant.com>",
-  "license": "MIT",
+  "author": "tonyCh <contact@tonycharmant.com>",
+  "license": "FSS",
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
@@ -79,12 +79,15 @@
         "AppImage"
       ],
       "category": "Network",
-      "maintainer": "Tony Charmant <contact@tonycharmant.com>",
-      "vendor": "Tony Charmant",
-      "description": "Network penetration testing & security audit desktop application",
+      "maintainer": "tonyCh <contact@tonycharmant.com>",
+      "vendor": "tonyCh",
+      "description": "Black Network is a state-of-the-art, comprehensive network penetration testing and security auditing platform. Designed for cybersecurity professionals, it integrates advanced traffic analysis, vulnerability scanning, and real-time network intelligence into an intuitive desktop environment.",
+      "executableArgs": [
+        "--no-sandbox"
+      ],
       "desktop": {
         "Name": "Black Network",
-        "Comment": "Network penetration testing & security audit desktop application",
+        "Comment": "Advanced Network Penetration Testing & Security Audit Platform",
         "Type": "Application"
       }
     },
