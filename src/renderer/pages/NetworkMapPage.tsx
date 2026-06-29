@@ -30,8 +30,9 @@ export function NetworkMapPage() {
   const [isScanning, setIsScanning] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'topology'>('grid')
   const [scanTarget, setScanTarget] = useState('192.168.1.0/24')
-  const [scanMode, setScanMode] = useState<'quick' | 'normal' | 'aggressive'>('quick')
+  const [scanMode, setScanMode] = useState<'quick' | 'normal' | 'aggressive' | 'ai-deep'>('quick')
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null)
+  const [scanStatusMsg, setScanStatusMsg] = useState('Scanning network...')
   
   const handleStartScan = async () => {
     if (!activeSessionId) {
@@ -41,6 +42,7 @@ export function NetworkMapPage() {
     setIsScanning(true)
     setDevices([])
     setSelectedDevice(null)
+    setScanStatusMsg(`Scanning network (${scanMode} mode)...`)
     
     if (window.api) {
       const unsubFound = window.api.on('scan:device-found', (device: Device) => {
@@ -49,13 +51,19 @@ export function NetworkMapPage() {
           return [...filtered, device]
         })
       })
+      const unsubProgress = window.api.on('scan:progress', (progress: any) => {
+        if (progress.message) {
+          setScanStatusMsg(progress.message)
+        }
+      })
       const unsubComplete = window.api.on('scan:complete', () => {
         setIsScanning(false)
         unsubFound()
+        unsubProgress()
         unsubComplete()
       })
       
-      await window.api.startScan(activeSessionId, { target: scanTarget, mode: scanMode })
+      await window.api.startScan(activeSessionId, { target: scanTarget, mode: scanMode as any })
     } else {
       setTimeout(() => setIsScanning(false), 2000)
     }
@@ -91,6 +99,7 @@ export function NetworkMapPage() {
             <option value="quick">Quick Discovery</option>
             <option value="normal">Normal Scan</option>
             <option value="aggressive">Aggressive (OS+Ports)</option>
+            <option value="ai-deep">AI Deep Discovery (SOTA)</option>
           </select>
           {isScanning ? (
             <Button variant="destructive" onClick={handleStopScan}>
@@ -130,9 +139,9 @@ export function NetworkMapPage() {
           Discovered Devices: <Badge variant="success" className="ml-2">{devices.length}</Badge>
         </span>
         {isScanning && (
-          <div className="flex items-center text-teal text-sm font-medium animate-pulse">
-            <div className="w-2 h-2 bg-teal rounded-full mr-2"></div>
-            Scanning network ({scanMode} mode)...
+          <div className="flex items-center text-teal text-sm font-medium animate-pulse bg-teal/10 px-3 py-1 rounded-full border border-teal/30">
+            <div className="w-2 h-2 bg-teal rounded-full mr-2 shadow-[0_0_8px_rgba(45,212,191,0.8)]"></div>
+            {scanStatusMsg}
           </div>
         )}
       </div>

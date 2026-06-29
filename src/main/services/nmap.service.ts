@@ -143,6 +143,9 @@ class NmapService {
       case 'aggressive':
         args.push('-sV', '-O', '-sC', '-T4', '--open', '-p', options.ports ?? '1-65535')
         break
+      case 'ai-deep' as any:
+        args.push('-sn', '-PR', '-PS22,80,443', '-PU53,137,1900,5353', '-PE', '-T4')
+        break
     }
 
     if (options.interface) args.push('-e', options.interface)
