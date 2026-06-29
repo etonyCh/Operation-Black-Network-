@@ -30,6 +30,9 @@ const ALLOWED_RECEIVE_CHANNELS: readonly string[] = [
   IPC.REPORT_PROGRESS,
   IPC.REPORT_COMPLETE,
   IPC.REPORT_ERROR,
+  'dependency:install:progress',
+  'dependency:install:done',
+  'dependency:install:error',
   // Background AI analysis pushed without an invoke request
   'ai:background-analysis',
 ]
@@ -39,6 +42,10 @@ const ALLOWED_RECEIVE_CHANNELS: readonly string[] = [
 contextBridge.exposeInMainWorld('api', {
   // ── System ────────────────────────────────────────────────────────────────
   checkDependencies: () => ipcRenderer.invoke(IPC.SYSTEM_CHECK_DEPS).then(r => r.deps ?? []),
+
+  getMissingDependencies: () => ipcRenderer.invoke(IPC.SYSTEM_GET_MISSING_DEPS).then(r => r.missing ?? []),
+
+  installDependencies: (tools: string[]) => ipcRenderer.invoke(IPC.SYSTEM_INSTALL_DEPS, { tools }),
 
   getNetworkInterfaces: () =>
     ipcRenderer.invoke(IPC.SYSTEM_GET_INTERFACES).then(r => r.interfaces ?? []),

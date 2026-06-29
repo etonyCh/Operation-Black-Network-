@@ -3,7 +3,7 @@
  * Pour plus d'informations sur l'architecture de ce module et du projet,
  * veuillez consulter le dossier /docs/ à la racine du projet.
  */
-import React from 'react'
+import React, { useState } from 'react'
 import { Layout } from './components/layout/Layout'
 import { useAppStore } from './store/useAppStore'
 import { NetworkMapPage } from './pages/NetworkMapPage'
@@ -13,9 +13,11 @@ import { ProxyPage } from './pages/ProxyPage'
 import { HistoryPage } from './pages/HistoryPage'
 import { ReportsPage } from './pages/ReportsPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { SetupOverlay } from './components/ui/SetupOverlay'
 
 function App() {
   const { currentPage } = useAppStore()
+  const [setupComplete, setSetupComplete] = useState(false)
 
   const renderPage = () => {
     switch (currentPage) {
@@ -31,9 +33,12 @@ function App() {
   }
 
   return (
-    <Layout>
-      {renderPage()}
-    </Layout>
+    <>
+      {!setupComplete && <SetupOverlay onComplete={() => setSetupComplete(true)} />}
+      <Layout>
+        {renderPage()}
+      </Layout>
+    </>
   )
 }
 

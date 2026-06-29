@@ -64,6 +64,8 @@ import type { Session } from '@shared/types/ipc.types'
 export interface BlackNetworkAPI {
   // ── System ────────────────────────────────────────────────────────────────
   checkDependencies: () => Promise<DependencyStatus[]>
+  getMissingDependencies: () => Promise<DependencyStatus[]>
+  installDependencies: (tools: string[]) => Promise<{ success: boolean; error?: string }>
   getNetworkInterfaces: () => Promise<NetworkInterface[]>
 
   // ── Scan ──────────────────────────────────────────────────────────────────

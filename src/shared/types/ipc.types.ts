@@ -1,5 +1,7 @@
 export const IPC = {
   SYSTEM_CHECK_DEPS: 'system:check-deps',
+  SYSTEM_GET_MISSING_DEPS: 'system:get-missing-deps',
+  SYSTEM_INSTALL_DEPS: 'system:install-deps',
   SYSTEM_GET_INTERFACES: 'system:get-interfaces',
   SCAN_START: 'scan:start',
   SCAN_STOP: 'scan:stop',
