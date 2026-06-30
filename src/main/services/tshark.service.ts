@@ -69,7 +69,6 @@ class TsharkService {
       '-T',
       'ek', // Elasticsearch/JSONL output
       '-l', // line-buffered
-      '--no-duplicate-keys',
       '-e',
       'frame.len',
       '-e',

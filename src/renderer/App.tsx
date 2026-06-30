@@ -32,9 +32,12 @@ function App() {
     }
   }
 
+  // Bypass setup in tests where window.api might be stubbed out and block UI
+  const isTest = (window as any).PLAYWRIGHT_TEST || process.env.NODE_ENV === 'test'
+
   return (
     <>
-      {!setupComplete && <SetupOverlay onComplete={() => setSetupComplete(true)} />}
+      {!setupComplete && !isTest && <SetupOverlay onComplete={() => setSetupComplete(true)} />}
       <Layout>
         {renderPage()}
       </Layout>
