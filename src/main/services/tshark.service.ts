@@ -98,8 +98,6 @@ class TsharkService {
       '-e',
       'http.request.full_uri',
       '-e',
-      'http.file.data',
-      '-e',
       'ftp.request.command',
       '-e',
       'ftp.request.arg',
