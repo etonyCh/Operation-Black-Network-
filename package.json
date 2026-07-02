@@ -78,7 +78,7 @@
   },
   "build": {
     "appId": "com.black-network.app",
-    "productName": "Black Network",
+    "productName": "BlackNetwork",
     "directories": {
       "output": "dist"
     },
