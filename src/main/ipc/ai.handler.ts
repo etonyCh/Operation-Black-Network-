@@ -1,5 +1,6 @@
 import { IpcMain } from 'electron'
 import { aiService } from '@main/services/ai.service'
+import { sotaService } from '@main/services/sota.service'
 import { IPC } from '@shared/types/ipc.types'
 import type { AIAnalysisRequest, AIMessage, AIMode } from '@shared/types/ai.types'
 import { logger } from '@main/utils/logger'
@@ -56,5 +57,25 @@ export function registerAIHandlers(ipcMain: IpcMain): void {
     } catch (err) {
       return { success: false, error: err instanceof Error ? err.message : String(err) }
     }
+  })
+
+  // ── SOTA 2026: PQC cryptographic audits ──────────────────────────────────────
+  ipcMain.handle('sota:pqc-check', async (_event, payload: { port: number; serviceName?: string; product?: string; extraInfo?: string }) => {
+    return sotaService.analyzePqcStatus(payload.port, payload.serviceName, payload.product, payload.extraInfo)
+  })
+
+  // ── SOTA 2026: PDDL action validations ───────────────────────────────────────
+  ipcMain.handle('sota:pddl-validate', async (_event, payload: { action: string; targetIp: string; gatewayIp?: string }) => {
+    return sotaService.validateActionWithPddl(payload.action, payload.targetIp, payload.gatewayIp)
+  })
+
+  // ── SOTA 2026: CTEM threat simulations ───────────────────────────────────────
+  ipcMain.handle('sota:run-simulation', async (_event, payload: { type: string; targetIp: string }) => {
+    return sotaService.runCtemSimulation(payload.type, payload.targetIp)
+  })
+
+  // ── SOTA 2026: Agent audit logs ──────────────────────────────────────────────
+  ipcMain.handle('sota:get-logs', async () => {
+    return sotaService.getAgentAuditLogs()
   })
 }

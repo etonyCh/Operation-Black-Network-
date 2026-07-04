@@ -6,7 +6,7 @@ let page: Page
 
 test.beforeAll(async () => {
   app = await electron.launch({
-    args: [resolve(__dirname, '../../out/main/index.js')],
+    args: [resolve(__dirname, '../../out/main/index.js'), '--no-sandbox', '--disable-gpu'],
     env: {
       ...process.env,
       PATH: `${resolve(__dirname, '../mocks')}:${process.env.PATH ?? '/usr/bin:/bin'}`,

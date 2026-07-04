@@ -121,6 +121,30 @@ export interface BlackNetworkAPI {
 
   checkAIConfig: () => Promise<boolean>
 
+  // ── SOTA 2026 ─────────────────────────────────────────────────────────────
+  checkPqcStatus: (payload: { port: number; serviceName?: string; product?: string; extraInfo?: string }) => Promise<{
+    isQuantumReady: boolean
+    riskLevel: 'high' | 'medium' | 'low' | 'none'
+    algorithmsFound: string[]
+    recommendations: string[]
+  }>
+  validatePddl: (payload: { action: string; targetIp: string; gatewayIp?: string }) => Promise<{
+    isValid: boolean
+    ruleViolated?: string
+    explanations: string
+  }>
+  runSimulation: (payload: { type: string; targetIp: string }) => Promise<{ success: boolean; message: string }>
+  getAgentAuditLogs: () => Promise<{
+    id: string
+    timestamp: number
+    agentId: string
+    action: string
+    input: string
+    output: string
+    pddlValid: number
+    pddlRule?: string
+  }[]>
+
   // ── Reports ───────────────────────────────────────────────────────────────
   generateReport: (options: ReportOptions) => Promise<ReportResult>
 

@@ -1,17 +1,209 @@
 import React, { useState, useEffect } from 'react'
-import { Fingerprint, AlertTriangle, ShieldCheck, Search, Activity, Cpu, Monitor as MonitorIcon, Server, ShieldAlert } from 'lucide-react'
+import { Fingerprint, AlertTriangle, ShieldCheck, Search, Activity, Cpu, Monitor as MonitorIcon, Server, ShieldAlert, Cpu as PqcIcon, ShieldCheck as CtemIcon, Info } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
 import { useAppStore } from '../store/useAppStore'
-import type { Device } from '@shared/types/device.types'
+import type { Device, Port } from '@shared/types/device.types'
 import type { Vulnerability } from '@shared/types/vulnerability.types'
 
 type DeviceWithVulns = Device & { vulnerabilities?: Vulnerability[] }
 
+interface PqcTabProps {
+  device: DeviceWithVulns
+}
+
+function PqcTab({ device }: PqcTabProps) {
+  const [pqcResults, setPqcResults] = useState<Record<number, {
+    isQuantumReady: boolean
+    riskLevel: 'high' | 'medium' | 'low' | 'none'
+    algorithmsFound: string[]
+    recommendations: string[]
+  }>>({})
+  const [simulating, setSimulating] = useState<string | null>(null)
+  const [simMessage, setSimMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (device.ports && window.api) {
+      // Clear previous results
+      setPqcResults({})
+      device.ports.forEach(async (p) => {
+        const res = await window.api.checkPqcStatus({
+          port: p.port,
+          serviceName: p.service,
+          product: p.product,
+          extraInfo: p.extraInfo
+        })
+        setPqcResults(prev => ({ ...prev, [p.port]: res }))
+      })
+    }
+  }, [device])
+
+  const handleRunSimulation = async (type: string) => {
+    if (!window.api) return
+    setSimulating(type)
+    setSimMessage(null)
+    try {
+      const res = await window.api.runSimulation({ type, targetIp: device.ip })
+      setSimMessage(res.message)
+    } catch (err) {
+      setSimMessage(`Erreur de simulation: ${String(err)}`)
+    } finally {
+      setSimulating(null)
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* 1. Cryptographie Post-Quantique (PQC) */}
+      <Card className="bg-navy-800/50 border-border">
+        <CardHeader>
+          <CardTitle className="text-sm font-semibold flex items-center text-teal">
+            <PqcIcon className="w-4 h-4 mr-2" />
+            Audit de Cryptographie Post-Quantique (PQC) & Crypto-Agilité
+          </CardTitle>
+          <p className="text-xs text-navy-300">
+            Analyse de la robustesse cryptographique des services ouverts face aux futurs ordinateurs quantiques (Feuille de route NIST 2030-2031).
+          </p>
+        </CardHeader>
+        <CardContent>
+          {device.ports && device.ports.length > 0 ? (
+            <div className="space-y-4">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-navy-900 border-b border-border">
+                  <tr>
+                    <th className="px-3 py-2 font-medium text-navy-200">Service</th>
+                    <th className="px-3 py-2 font-medium text-navy-200">Statut Quantique</th>
+                    <th className="px-3 py-2 font-medium text-navy-200">Algorithmes Détectés</th>
+                    <th className="px-3 py-2 font-medium text-navy-200">Recommandations</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {device.ports.map((p, i) => {
+                    const result = pqcResults[p.port]
+                    if (!result) return (
+                      <tr key={i}>
+                        <td className="px-3 py-2 font-mono text-teal">{p.port}/{p.protocol} ({p.service})</td>
+                        <td className="px-3 py-2 text-navy-400" colSpan={3}>Analyse en cours...</td>
+                      </tr>
+                    )
+                    return (
+                      <tr key={i} className="hover:bg-navy-800/30 transition-colors">
+                        <td className="px-3 py-2 font-mono">
+                          <span className="text-teal font-bold">{p.port}/{p.protocol}</span>
+                          <span className="text-navy-300 block text-[10px]">{p.service || 'unknown'}</span>
+                        </td>
+                        <td className="px-3 py-2">
+                          {result.isQuantumReady ? (
+                            <Badge variant="outline" className="border-teal/50 text-teal bg-teal/5 text-[10px] font-bold">QUANTUM SAFE</Badge>
+                          ) : (
+                            <Badge variant="destructive" className="bg-red-950 text-red-400 border border-red-900 text-[10px] font-bold">VULNÉRABLE (MENACE HNDL)</Badge>
+                          )}
+                        </td>
+                        <td className="px-3 py-2 font-mono text-slate-300 max-w-[200px] truncate">
+                          {result.algorithmsFound.join(', ')}
+                        </td>
+                        <td className="px-3 py-2 text-navy-200 max-w-[300px]">
+                          <ul className="list-disc pl-4 space-y-0.5 text-[10px]">
+                            {result.recommendations.map((rec, rIdx) => (
+                              <li key={rIdx}>{rec}</li>
+                            ))}
+                          </ul>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+              <div className="bg-navy-950 p-3 rounded-lg border border-border flex items-start space-x-2 text-[10px] text-navy-300">
+                <Info className="w-4 h-4 text-teal shrink-0 mt-0.5" />
+                <p>
+                  <strong>Menace "Harvest-Now-Decrypt-Later" (HNDL) :</strong> Un adversaire actif peut stocker vos données chiffrées SSH/SSL classiques aujourd'hui pour les déchiffrer dès l'apparition d'un ordinateur quantique. Configurez dès à présent le support TLS hybride (ML-KEM) et SSH (X25519-Kyber768) conformément à la section 6.6 du cahier des charges.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="p-4 text-center text-navy-400 text-xs">
+              Aucun service découvert sur cet hôte. Veuillez lancer un Fingerprint.
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* 2. Exposition Continue & Simulations (CTEM / BAS) */}
+      <Card className="bg-navy-800/50 border-border">
+        <CardHeader>
+          <CardTitle className="text-sm font-semibold flex items-center text-teal">
+            <CtemIcon className="w-4 h-4 mr-2" />
+            Gestion Continue de l'Exposition aux Menaces (CTEM) - Simulations
+          </CardTitle>
+          <p className="text-xs text-navy-300">
+            Déclenchez des simulations d'attaques Breach & Attack Simulation (BAS) pour auditer en temps réel l'orchestration multi-agent et la couche de validation PDDL.
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-navy-900/50 p-3 rounded border border-border flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-bold text-slate-200 block">Simulation ARP Spoofing</span>
+                <span className="text-[10px] text-navy-400 block mt-1">Simule une attaque d'interception ARP. Teste l'agent d'isolement L2 supervisé par PDDL.</span>
+              </div>
+              <Button 
+                onClick={() => handleRunSimulation('arp-spoof')} 
+                disabled={simulating !== null} 
+                className="mt-3 text-[10px] py-1 h-7"
+              >
+                {simulating === 'arp-spoof' ? 'Simulation...' : 'Lancer Simulation'}
+              </Button>
+            </div>
+
+            <div className="bg-navy-900/50 p-3 rounded border border-border flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-bold text-slate-200 block">Simulation Port Scan</span>
+                <span className="text-[10px] text-navy-400 block mt-1">Simule un balayage agressif. Vérifie la fonction de triage et de dé-duplication L1 de l'IA.</span>
+              </div>
+              <Button 
+                onClick={() => handleRunSimulation('port-scan')} 
+                disabled={simulating !== null} 
+                className="mt-3 text-[10px] py-1 h-7"
+              >
+                {simulating === 'port-scan' ? 'Simulation...' : 'Lancer Simulation'}
+              </Button>
+            </div>
+
+            <div className="bg-navy-900/50 p-3 rounded border border-border flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-bold text-slate-200 block">Simulation Migration PQC</span>
+                <span className="text-[10px] text-navy-400 block mt-1">Simule l'application d'un correctif cryptographique post-quantique.</span>
+              </div>
+              <Button 
+                onClick={() => handleRunSimulation('pqc-migration')} 
+                disabled={simulating !== null} 
+                className="mt-3 text-[10px] py-1 h-7"
+              >
+                {simulating === 'pqc-migration' ? 'Simulation...' : 'Lancer Simulation'}
+              </Button>
+            </div>
+          </div>
+
+          {simMessage && (
+            <div className="bg-teal/10 p-3 rounded border border-teal/30 text-xs text-slate-200 space-y-1">
+              <span className="font-bold text-teal text-[10px] uppercase block">Résultat de la Simulation CTEM</span>
+              <p>{simMessage}</p>
+              <p className="text-[9px] text-navy-300 mt-2 italic">
+                Note : Ouvrez le panneau "AI Sentinel & SOC Agent" à droite (bouton flottant AI) et basculez sur l'onglet "Agentic SOC & PDDL" pour inspecter les logs détaillés et la validation logique PDDL.
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
 export function FingerprintPage() {
   const { activeSessionId } = useAppStore()
-  const [activeTab, setActiveTab] = useState<'overview' | 'ports' | 'vulns'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'ports' | 'vulns' | 'pqc'>('overview')
   const [devices, setDevices] = useState<DeviceWithVulns[]>([])
   const [filteredDevices, setFilteredDevices] = useState<DeviceWithVulns[]>([])
   const [searchQuery, setSearchQuery] = useState('')
@@ -35,7 +227,6 @@ export function FingerprintPage() {
     if (res.success && res.devices) {
       setDevices(res.devices)
       setFilteredDevices(res.devices)
-      // Update selected device if it exists
       if (selectedDevice) {
         const updated = res.devices.find((d: any) => d.id === selectedDevice.id)
         if (updated) setSelectedDevice(updated)
@@ -66,7 +257,7 @@ export function FingerprintPage() {
         setScanProgress(null)
         unsubProgress()
         unsubComplete()
-        loadDevices() // Refresh data
+        loadDevices()
       })
       const unsubError = window.api.on('fingerprint:error', (err: any) => {
         setIsScanning(false)
@@ -203,6 +394,13 @@ export function FingerprintPage() {
                   Vulnerabilities {selectedDevice.vulnerabilities && <Badge variant={selectedDevice.vulnerabilities.length > 0 ? 'destructive' : 'secondary'} className="ml-1 text-[10px]">{selectedDevice.vulnerabilities.length}</Badge>}
                   {activeTab === 'vulns' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-teal shadow-[0_0_8px_rgba(45,212,191,0.8)]"></div>}
                 </button>
+                <button 
+                  onClick={() => setActiveTab('pqc')}
+                  className={`pb-2 text-sm font-medium transition-colors relative ${activeTab === 'pqc' ? 'text-teal' : 'text-navy-300 hover:text-slate-100'}`}
+                >
+                  PQC & CTEM Audit
+                  {activeTab === 'pqc' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-teal shadow-[0_0_8px_rgba(45,212,191,0.8)]"></div>}
+                </button>
               </div>
             </div>
 
@@ -324,6 +522,10 @@ export function FingerprintPage() {
                     </div>
                   )}
                 </div>
+              )}
+
+              {activeTab === 'pqc' && (
+                <PqcTab device={selectedDevice} />
               )}
             </div>
           </div>

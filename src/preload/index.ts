@@ -87,6 +87,19 @@ contextBridge.exposeInMainWorld('api', {
 
   checkAIConfig: () => ipcRenderer.invoke('ai:check-config'),
 
+  // ── SOTA 2026 ─────────────────────────────────────────────────────────────
+  checkPqcStatus: (payload: { port: number; serviceName?: string; product?: string; extraInfo?: string }) =>
+    ipcRenderer.invoke('sota:pqc-check', payload),
+
+  validatePddl: (payload: { action: string; targetIp: string; gatewayIp?: string }) =>
+    ipcRenderer.invoke('sota:pddl-validate', payload),
+
+  runSimulation: (payload: { type: string; targetIp: string }) =>
+    ipcRenderer.invoke('sota:run-simulation', payload),
+
+  getAgentAuditLogs: () =>
+    ipcRenderer.invoke('sota:get-logs'),
+
   // ── Reports ───────────────────────────────────────────────────────────────
   generateReport: (options: unknown) => ipcRenderer.invoke(IPC.REPORT_GENERATE, { options }),
 

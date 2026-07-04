@@ -127,6 +127,17 @@ CREATE TABLE IF NOT EXISTS settings (
   value TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS agent_audit_logs (
+  id          TEXT PRIMARY KEY,
+  timestamp   INTEGER NOT NULL,
+  agent_id    TEXT NOT NULL,
+  action      TEXT NOT NULL,
+  input       TEXT,
+  output      TEXT,
+  pddl_valid  INTEGER NOT NULL DEFAULT 1,
+  pddl_rule   TEXT
+);
+
 CREATE INDEX IF NOT EXISTS idx_devices_session    ON devices(session_id);
 CREATE INDEX IF NOT EXISTS idx_vulns_session      ON vulnerabilities(session_id);
 CREATE INDEX IF NOT EXISTS idx_vulns_device       ON vulnerabilities(device_id);
