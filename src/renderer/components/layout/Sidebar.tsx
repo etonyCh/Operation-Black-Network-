@@ -2,6 +2,7 @@ import React from 'react'
 import { Network, Fingerprint, Activity, ShieldAlert, History, Settings, FileText } from 'lucide-react'
 import { useAppStore, Page } from '../../store/useAppStore'
 import { cn } from '../../lib/utils'
+import logo from '../../assets/logo.png'
 
 const navItems: { id: Page; label: string; icon: React.FC<any> }[] = [
   { id: 'network-map', label: 'Network Map', icon: Network },
@@ -18,8 +19,8 @@ export function Sidebar() {
 
   return (
     <aside className="w-64 border-r border-border bg-panel-dark/50 backdrop-blur-md flex flex-col">
-      <div className="h-16 flex items-center px-6 border-b border-border">
-        <ShieldAlert className="w-6 h-6 text-teal mr-2" />
+      <div className="h-16 flex items-center px-5 border-b border-border">
+        <img src={logo} className="w-8 h-8 mr-2 object-contain" alt="Logo" />
         <span className="text-lg font-bold text-slate-100 tracking-wide">Black Network</span>
       </div>
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
