@@ -29,7 +29,7 @@ function guessDeviceType(ports: Port[], osMatch?: OSMatch): DeviceType {
   const portNums = new Set(ports.map(p => p.port))
   const os = (osMatch?.name ?? '').toLowerCase()
   const osType = (osMatch?.type ?? '').toLowerCase()
-  const osVendor = (osMatch?.vendor ?? '').toLowerCase()
+
 
   if (osType === 'router' || os.includes('router') || os.includes('ios') || os.includes('junos'))
     return 'router'

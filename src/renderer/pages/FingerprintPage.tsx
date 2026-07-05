@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Fingerprint, AlertTriangle, ShieldCheck, Search, Activity, Cpu, Monitor as MonitorIcon, Server, ShieldAlert, Cpu as PqcIcon, ShieldCheck as CtemIcon, Info } from 'lucide-react'
+import { Fingerprint, ShieldCheck, Search, Activity, Cpu, Monitor as MonitorIcon, Server, Cpu as PqcIcon, ShieldCheck as CtemIcon, Info } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
 import { useAppStore } from '../store/useAppStore'
-import type { Device, Port } from '@shared/types/device.types'
+import type { Device } from '@shared/types/device.types'
 import type { Vulnerability } from '@shared/types/vulnerability.types'
 
 type DeviceWithVulns = Device & { vulnerabilities?: Vulnerability[] }

@@ -77,12 +77,12 @@ class SotaService {
   /**
    * Post-Quantum Cryptography (PQC) readiness check for open services/ports.
    */
-  analyzePqcStatus(port: number, serviceName = '', product = '', extraInfo = ''): PqcStatus {
+  analyzePqcStatus(port: number, serviceName = '', product = '', _extraInfo = ''): PqcStatus {
     const algoFound: string[] = []
     const recommendations: string[] = []
     const svc = (serviceName || '').toLowerCase()
     const prod = (product || '').toLowerCase()
-    const extra = (extraInfo || '').toLowerCase()
+
 
     if (port === 22 || svc === 'ssh' || prod.includes('openssh')) {
       algoFound.push('ssh-rsa (2048-bit)', 'ecdh-sha2-nistp256')

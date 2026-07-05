@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
 import { useAppStore } from '../store/useAppStore'
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { AreaChart, Area, Tooltip, ResponsiveContainer } from 'recharts'
 import type { TrafficPacket, Credential, TrafficStats } from '@shared/types/traffic.types'
 
 export function TrafficPage() {

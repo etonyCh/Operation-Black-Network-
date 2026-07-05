@@ -21,7 +21,7 @@ interface AgentLog {
 }
 
 export function AIPanel() {
-  const { isAIPanelOpen, setAIPanelOpen, activeSessionId } = useAppStore()
+  const { isAIPanelOpen, setAIPanelOpen } = useAppStore()
   const [activeTab, setActiveTab] = useState<'chat' | 'soc'>('chat')
   const [messages, setMessages] = useState<AIMessage[]>([
     { role: 'model', content: "Hello! I'm the Black Network AI. How can I help you analyze your network today? (Vous pouvez me poser des questions en Français ou en Kirundi)." }
