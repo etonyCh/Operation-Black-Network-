@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+import * as crypto from 'crypto'
 import { spawn, ChildProcess } from 'child_process'
 import { writeFileSync, unlinkSync } from 'fs'
 import { tmpdir } from 'os'

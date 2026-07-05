@@ -26,12 +26,6 @@ export function HistoryPage() {
         if (result.success && result.sessions) {
           setSessions(result.sessions)
         }
-      } else {
-        // Mock data for development
-        setSessions([
-          { id: '1', name: 'Home Network Scan', target: '192.168.1.0/24', createdAt: Date.now() - 86400000, deviceCount: 12, vulnCount: 3, riskScore: 7 },
-          { id: '2', name: 'Web Server Audit', target: '10.0.0.5', createdAt: Date.now() - 3600000, deviceCount: 1, vulnCount: 1, riskScore: 9 },
-        ])
       }
     }
     fetchSessions()
@@ -52,19 +46,6 @@ export function HistoryPage() {
         setActiveSessionId(result.session.id)
         setCurrentPage('network-map')
       }
-    } else {
-      const newSession: Session = {
-        id: Math.random().toString(),
-        name: newSessionName,
-        target: newSessionTarget,
-        createdAt: Date.now(),
-        deviceCount: 0,
-        vulnCount: 0,
-        riskScore: 0
-      }
-      setSessions([newSession, ...sessions])
-      setActiveSessionId(newSession.id)
-      setCurrentPage('network-map')
     }
     setShowDialog(false)
     setNewSessionName('')

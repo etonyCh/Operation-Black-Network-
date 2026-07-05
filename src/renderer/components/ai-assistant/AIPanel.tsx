@@ -83,11 +83,6 @@ export function AIPanel() {
         } else {
           setMessages(prev => [...prev, { role: 'model', content: `Error: ${res.error || 'Unable to contact Gemini.'}` }])
         }
-      } else {
-        // Mock fallback if API not available
-        setTimeout(() => {
-          setMessages(prev => [...prev, { role: 'model', content: "Simulated response: Please verify your Gemini API key in Settings." }])
-        }, 1000)
       }
     } catch (err) {
       setMessages(prev => [...prev, { role: 'model', content: `Error: ${String(err)}` }])

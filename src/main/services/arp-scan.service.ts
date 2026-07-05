@@ -1,5 +1,6 @@
 import { spawn } from 'child_process'
 import { networkInterfaces } from 'os'
+import * as crypto from 'crypto'
 import { logger } from '@main/utils/logger'
 import type { Device } from '@shared/types/device.types'
 

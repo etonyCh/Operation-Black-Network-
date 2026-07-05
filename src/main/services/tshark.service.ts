@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events'
 import { spawn, ChildProcess } from 'child_process'
 import { logger } from '@main/utils/logger'
+import * as crypto from 'crypto'
 import type {
   TrafficPacket,
   Credential,

@@ -1,4 +1,5 @@
 import { IpcMain, BrowserWindow } from 'electron'
+import * as crypto from 'crypto'
 import { nmapService } from '@main/services/nmap.service'
 import { DeviceRepository } from '@main/db/repositories/device.repository'
 import { IPC } from '@shared/types/ipc.types'

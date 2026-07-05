@@ -1,4 +1,5 @@
 import { parseString } from 'xml2js'
+import * as crypto from 'crypto'
 import type { Device, Port, OSMatch, DeviceType } from '@shared/types/device.types'
 import type { Vulnerability, Severity } from '@shared/types/vulnerability.types'
 

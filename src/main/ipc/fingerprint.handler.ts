@@ -1,4 +1,5 @@
 import { IpcMain, BrowserWindow } from 'electron'
+import * as crypto from 'crypto'
 import { nmapService } from '@main/services/nmap.service'
 import { nvdService } from '@main/services/nvd.service'
 import { aiService } from '@main/services/ai.service'

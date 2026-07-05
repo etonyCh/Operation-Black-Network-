@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events'
 import { spawn } from 'child_process'
 import mdns from 'multicast-dns'
+import * as crypto from 'crypto'
 import { Client as SsdpClient } from 'node-ssdp'
 import { nmapService, ScanEmitter } from './nmap.service'
 import { logger } from '@main/utils/logger'

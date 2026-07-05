@@ -1,4 +1,5 @@
 import { Database } from '@main/db/database'
+import * as crypto from 'crypto'
 import type { Session } from '@shared/types/ipc.types'
 
 interface SessionRow {
