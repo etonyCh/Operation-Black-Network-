@@ -130,65 +130,65 @@ function PqcTab({ device }: PqcTabProps) {
         </CardContent>
       </Card>
 
-      {/* 2. Exposition Continue & Simulations (CTEM / BAS) */}
+      {/* 2. Exposition Continue & Audits Actifs (CTEM / BAS) */}
       <Card className="bg-navy-800/50 border-border">
         <CardHeader>
           <CardTitle className="text-sm font-semibold flex items-center text-teal">
             <CtemIcon className="w-4 h-4 mr-2" />
-            Gestion Continue de l'Exposition aux Menaces (CTEM) - Simulations
+            Gestion Continue de l'Exposition aux Menaces (CTEM) - Audits Actifs (BAS)
           </CardTitle>
           <p className="text-xs text-navy-300">
-            Déclenchez des simulations d'attaques Breach & Attack Simulation (BAS) pour auditer en temps réel l'orchestration multi-agent et la couche de validation PDDL.
+            Déclenchez des audits de sécurité active Breach & Attack Simulation (BAS) pour tester en temps réel l'orchestration multi-agent et la couche de validation PDDL.
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-navy-900/50 p-3 rounded border border-border flex flex-col justify-between">
               <div>
-                <span className="text-xs font-bold text-slate-200 block">Simulation ARP Spoofing</span>
-                <span className="text-[10px] text-navy-400 block mt-1">Simule une attaque d'interception ARP. Teste l'agent d'isolement L2 supervisé par PDDL.</span>
+                <span className="text-xs font-bold text-slate-200 block">Test d'Interception ARP</span>
+                <span className="text-[10px] text-navy-400 block mt-1">Exécute un test d'interception ARP pour éprouver l'agent d'isolement L2 supervisé par PDDL.</span>
               </div>
               <Button 
                 onClick={() => handleRunSimulation('arp-spoof')} 
                 disabled={simulating !== null} 
                 className="mt-3 text-[10px] py-1 h-7"
               >
-                {simulating === 'arp-spoof' ? 'Simulation...' : 'Lancer Simulation'}
+                {simulating === 'arp-spoof' ? 'Audit en cours...' : "Lancer le Test d'Audit"}
               </Button>
             </div>
 
             <div className="bg-navy-900/50 p-3 rounded border border-border flex flex-col justify-between">
               <div>
-                <span className="text-xs font-bold text-slate-200 block">Simulation Port Scan</span>
-                <span className="text-[10px] text-navy-400 block mt-1">Simule un balayage agressif. Vérifie la fonction de triage et de dé-duplication L1 de l'IA.</span>
+                <span className="text-xs font-bold text-slate-200 block">Audit de Balayage Port Scan</span>
+                <span className="text-[10px] text-navy-400 block mt-1">Déclenche un audit de scan de ports pour valider le triage et la dé-duplication L1 de l'IA.</span>
               </div>
               <Button 
                 onClick={() => handleRunSimulation('port-scan')} 
                 disabled={simulating !== null} 
                 className="mt-3 text-[10px] py-1 h-7"
               >
-                {simulating === 'port-scan' ? 'Simulation...' : 'Lancer Simulation'}
+                {simulating === 'port-scan' ? 'Audit en cours...' : "Lancer le Test d'Audit"}
               </Button>
             </div>
 
             <div className="bg-navy-900/50 p-3 rounded border border-border flex flex-col justify-between">
               <div>
-                <span className="text-xs font-bold text-slate-200 block">Simulation Migration PQC</span>
-                <span className="text-[10px] text-navy-400 block mt-1">Simule l'application d'un correctif cryptographique post-quantique.</span>
+                <span className="text-xs font-bold text-slate-200 block">Test de Migration PQC</span>
+                <span className="text-[10px] text-navy-400 block mt-1">Évalue la mise à niveau automatique vers les algorithmes post-quantiques sur la cible.</span>
               </div>
               <Button 
                 onClick={() => handleRunSimulation('pqc-migration')} 
                 disabled={simulating !== null} 
                 className="mt-3 text-[10px] py-1 h-7"
               >
-                {simulating === 'pqc-migration' ? 'Simulation...' : 'Lancer Simulation'}
+                {simulating === 'pqc-migration' ? 'Audit en cours...' : "Lancer le Test d'Audit"}
               </Button>
             </div>
           </div>
 
           {simMessage && (
             <div className="bg-teal/10 p-3 rounded border border-teal/30 text-xs text-slate-200 space-y-1">
-              <span className="font-bold text-teal text-[10px] uppercase block">Résultat de la Simulation CTEM</span>
+              <span className="font-bold text-teal text-[10px] uppercase block">Résultat de l'Audit Actif CTEM</span>
               <p>{simMessage}</p>
               <p className="text-[9px] text-navy-300 mt-2 italic">
                 Note : Ouvrez le panneau "AI Sentinel & SOC Agent" à droite (bouton flottant AI) et basculez sur l'onglet "Agentic SOC & PDDL" pour inspecter les logs détaillés et la validation logique PDDL.

@@ -232,8 +232,8 @@ class SotaService {
       return {
         success: true,
         message: validation.isValid
-          ? `Simulation ARP Spoof lancée : Menace détectée et plan d'isolement validé formellement par le PDDL (Hôte isolé).`
-          : `Simulation ARP Spoof lancée : L'isolement a été bloqué par le garde-fou PDDL car la cible est la passerelle réseau.`
+          ? `Audit d'interception ARP lancé : Menace détectée et plan d'isolement validé formellement par le PDDL (Hôte isolé).`
+          : `Audit d'interception ARP lancé : L'isolement a été bloqué par le garde-fou PDDL car la cible est la passerelle réseau.`
       }
     }
 
@@ -247,7 +247,7 @@ class SotaService {
 
       return {
         success: true,
-        message: `Simulation de scan de ports lancée : Triage agentique automatique complété. Activité suspecte corrélée.`
+        message: `Audit de scan de ports lancé : Triage agentique automatique complété. Activité suspecte corrélée.`
       }
     }
 
@@ -268,14 +268,14 @@ class SotaService {
       return {
         success: true,
         message: validation.isValid
-          ? `Simulation de migration PQC lancée : SSH mis à jour en hybride quantique.`
-          : `Simulation de migration PQC bloquée : Impossible de patcher en direct la passerelle réseau sans basculement.`
+          ? `Test de migration PQC lancé : SSH mis à jour en hybride quantique.`
+          : `Test de migration PQC bloqué : Impossible de patcher en direct la passerelle réseau sans basculement.`
       }
     }
 
     return {
       success: false,
-      message: `Type de simulation inconnu : ${type}`
+      message: `Type d'audit inconnu : ${type}`
     }
   }
 }
