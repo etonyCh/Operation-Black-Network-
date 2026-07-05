@@ -1,89 +1,100 @@
-# Black Network (NetSentinel) — Branche SOTA 2026
+# Black Network (NetSentinel)
 
-**Black Network** (NetSentinel) est une plateforme souveraine de pentest réseau automatisé et d'audit de sécurité intelligente. Conçu à l'origine pour une architecture d'audit en 4 phases (Cartographie, Empreinte, Interception, Man-In-The-Middle Proxy) dopée à l'IA, le projet intègre désormais dans cette branche les standards de cybersécurité émergents de **l'état de l'art 2026**.
+**Black Network** (NetSentinel) est une plateforme souveraine et intelligente de cartographie réseau, de détection de vulnérabilités et d'analyse de sécurité en temps réel. Conçue avec une architecture modulaire et autonome, elle combine l'intelligence artificielle agentique à des mécanismes de validation formelle par planification PDDL et d'audit cryptographique post-quantique (PQC) pour fournir un diagnostic de sécurité réseau d'élite.
 
 ---
 
-## 🚀 Fonctionnalités Avancées (SOTA 2026)
+## 🚀 Fonctionnalités Principales
 
-Cette branche (`feature/sota-2026-integration`) introduit les piliers techniques majeurs suivants :
+### 1. Cartographie & Découverte Réseau (Network Map)
+* **Scan Actif et Passif** : Découverte d'hôtes et de services réseau via l'intégration automatisée de Nmap et P0f.
+* **Topologie Interactive** : Représentation dynamique de la structure du réseau sous forme de graphe topologique interactif en **D3.js** ou de grille réactive.
 
-### 1. Cryptographie Post-Quantique (PQC) & Crypto-Agilité
-* **Détection Quantique** : Analyse en direct de la robustesse des clés et algorithmes découverts sur les ports ouverts (ex. détection de SSH/RSA classique).
-* **Menace HNDL (Harvest-Now-Decrypt-Later)** : Identification automatique des services vulnérables à l'interception immédiate pour décryptage ultérieur par ordinateur quantique.
-* **Recommandations NIST** : Propositions de migration active vers les algorithmes post-quantiques normalisés (ex. ML-KEM / Kyber, ML-DSA) et architectures hybrides.
+### 2. Prise d'Empreinte & Vulnérabilités (Fingerprint)
+* **Identification d'Équipements** : Détection fine des OS, adresses MAC, noms d'hôtes et ports ouverts.
+* **Corrélation CVE / NVD** : Analyse automatisée et matching avec la base nationale des vulnérabilités (NVD) via l'IA (Gemini) pour repérer les failles de sécurité.
 
-### 2. Validation Formelle des Actions par PDDL (Garde-Fou Agentique)
-* **Garde-Fou Logique** : Pour éviter toute action destructive initiée par les agents IA (hallucinations), NetSentinel utilise un moteur de planification formelle PDDL.
-* **Vérification de Préconditions** : Bloque automatiquement toute action système non sécurisée (ex. tentative d'isolement de la passerelle par défaut).
+### 3. Interception de Trafic (Traffic Dashboard)
+* **Capture Réseau en Temps Réel** : Écoute et capture des paquets transitant sur les interfaces locales (via Tshark/Wireshark).
+* **Extraction d'Identifiants** : Analyse passive et détection automatique des identifiants (FTP, HTTP Basic, etc.) transmis en clair.
 
-### 3. Architecture de SOC Agentique & Triage L1
-* **Triage Automatique** : Triage et dé-duplication intelligente des alertes réseau de niveau L1 par des agents autonomes pour éliminer la fatigue d'alerte des analystes.
-* **Copilote IA Bilingue** : Assistant conversationnel Gemini intégré capable d'échanger et de générer des rapports d'incident bilingues ( Kirundi / Français ).
-* **Protocole MCP (Model Context Protocol)** : Maintien d'un contexte partagé synchronisé entre les outils d'audit locaux (nmap, tshark) et l'agent LLM.
+### 4. Proxy Intercepteur (MITM Proxy)
+* **Spoofing ARP** : Redirection ciblée du trafic réseau pour auditer la résilience face aux attaques de l'homme du milieu.
+* **Proxy d'Interception HTTP/HTTPS** : Interception, modification en direct et rejeu de requêtes web via l'intégration de Mitmproxy.
 
-### 4. Sécurisation et Gouvernance des Agents IA (Modèle Cisco)
-* **Audit Forensic Local** : Journalisation immuable de toutes les interactions agent-système (prompts, actions, PDDL valid) persistée localement dans SQLite.
-* **Sandboxing et Hardening** : Isolement des privilèges des agents IA s'exécutant sur des comptes de service dédiés sans clés API partagées.
+### 5. Audit Cryptographique Post-Quantique (PQC)
+* **Diagnostic Post-Quantique** : Analyse en direct de la robustesse des clés et algorithmes cryptographiques face aux ordinateurs quantiques (menace *Harvest-Now-Decrypt-Later*).
+* **Migration Hybride** : Recommandations d'activation de la crypto-agilité et des suites conformes au NIST (ML-KEM, ML-DSA).
 
-### 5. Exposition Continue aux Menaces (CTEM & BAS)
-* **Simulations d'Attaques (BAS)** : Outils interactifs permettant de simuler des scénarios de menaces réelles (scans agressifs, ARP Spoofing, mise à niveau PQC) pour valider l'intégrité opérationnelle du SOC.
-* **Priorisation EPSS / SSVC** : Classement des vulnérabilités par exploitabilité réelle sur le terrain plutôt que par score CVSS statique.
+### 6. SOC Agentique & Copilote IA
+* **Triage L1 Autonome** : Analyse, dé-duplication et triage automatique des alertes par des agents IA pour éliminer la fatigue d'alerte.
+* **Copilote IA Bilingue** : Assistant conversationnel intégré capable de répondre aux questions techniques et de générer des rapports détaillés en **Kirundi** et en **Français**.
+* **Model Context Protocol (MCP)** : Synchronisation d'un contexte partagé et structuré entre le modèle IA et les outils de détection locaux.
+
+### 7. Validation Formelle PDDL (Garde-Fou Logique)
+* **Sécurisation des Actions** : Vérification des préconditions logiques par planification formelle PDDL avant l'exécution de remédiations (ex. blocage automatique de l'isolement de la passerelle réseau).
+* **Audit Forensic Immuable** : Journalisation locale de chaque interaction agent-système et des statuts de validation PDDL dans une base SQLite.
+
+### 8. Exposition Continue (CTEM & BAS)
+* **Simulations d'Attaques (BAS)** : Déclenchement de scénarios réalistes (scans de ports, usurpations, configurations cryptographiques) pour auditer continuellement l'efficacité du SOC et de la planification de sécurité.
 
 ---
 
 ## 🛠️ Stack Technique
 
-* **Frontend** : Electron + React (TypeScript) + Tailwind CSS + Zustand + Framer Motion + D3.js (Topologie).
-* **Backend** : Main process Electron orchestrant les binaires système (`nmap`, `tshark`, `mitmproxy`) et le moteur SQLite local.
-* **Intelligence Artificielle** : API Google Gemini (`@google/generative-ai`) et validation logique formelle PDDL.
+* **Frontend** : Electron + React (TypeScript) + Tailwind CSS + Zustand + Framer Motion + D3.js.
+* **Backend** : Main process Electron orchestrant les binaires locaux (`nmap`, `tshark`, `mitmproxy`) et le moteur SQLite local.
+* **Intelligence Artificielle** : API Google Gemini (`@google/generative-ai`) et planificateur logique PDDL.
 
 ---
 
-## 📁 Documentation Associée
+## 📁 Documentation
 
-Pour plus de détails sur la gouvernance, les budgets et l'architecture, consultez :
-- [Architecture & Spécifications (docs/architecture.md)](./docs/architecture.md)
-- [Cahier des Charges Original et Mis à jour (docx)](./NetSentinel_Cahier_des_Charges.docx)
+Pour obtenir de plus amples détails sur l'architecture globale, la gouvernance et les choix de conception :
+- [Architecture & Spécifications Techniques (docs/architecture.md)](./docs/architecture.md)
+- [Cahier des Charges Réseau & SOC (docx)](./NetSentinel_Cahier_des_Charges.docx)
 
 ---
 
 ## ⚙️ Installation et Lancement
 
 ### 1. Prérequis
-Assurez-vous d'avoir les dépendances système requises installées sur votre OS Linux (Ubuntu 24.04 recommandé) :
+Installez les dépendances système requises sur votre OS Linux (Ubuntu 24.04 recommandé) :
 ```bash
 sudo apt-get install nmap tshark wireshark-common arp-scan dsniff mitmproxy
 ```
 
-### 2. Récupérer la Branche SOTA 2026
-```bash
-git checkout feature/sota-2026-integration
-```
-
-### 3. Installer les Dépendances
+### 2. Installation du Projet
+Clonez le dépôt, puis installez les dépendances :
 ```bash
 npm install
-# Recompiler better-sqlite3 pour votre version Node locale si nécessaire :
-npm rebuild better-sqlite3
 ```
 
-### 4. Configuration d'Environnement
-Créez un fichier `.env` à la racine et renseignez votre clé d'API Google Gemini :
+### 3. Recompilation SQLite
+Recompilez la base de données native SQLite pour l'ABI d'Electron utilisée par Playwright et l'application :
+```bash
+npx -y @electron/rebuild -f -w better-sqlite3
+```
+
+### 4. Clé API Gemini
+Créez un fichier `.env` à la racine et renseignez votre clé d'API :
 ```env
-GEMINI_API_KEY=votre_cle_gemini_ici
+GEMINI_API_KEY=votre_cle_api_ici
 ```
 
 ### 5. Lancement
 ```bash
-# Lancement de l'application Electron en mode dev
+# Lancement de l'application en mode de développement
 npm run dev
 
-# Lancer la suite de tests unitaires Vitest (167 tests)
+# Exécution des tests unitaires (Vitest)
 npm run test
+
+# Exécution des tests d'intégration de bout en bout (Playwright E2E)
+ELECTRON_DISABLE_SANDBOX=1 xvfb-run -a npm run test:e2e
 ```
 
 ---
 
 ## ⚖️ Avertissement Légal
-NetSentinel est conçu **exclusivement** pour des missions d'audit réseau et de sensibilisation autorisées. Toute utilisation sur des infrastructures sans accord formel préalable est illégale.
+Black Network est conçu **exclusivement** pour des missions d'audit réseau et de sensibilisation autorisées. Toute utilisation sur des infrastructures sans accord formel préalable est illégale.
