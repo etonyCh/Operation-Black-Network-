@@ -1,5 +1,5 @@
 import React from 'react'
-import { Network, Fingerprint, Activity, ShieldAlert, History, Settings, FileText } from 'lucide-react'
+import { Network, Fingerprint, Activity, ShieldAlert, History, Settings, FileText, Search } from 'lucide-react'
 import { useAppStore, Page } from '../../store/useAppStore'
 import { cn } from '../../lib/utils'
 import logo from '../../assets/logo.png'
@@ -9,6 +9,7 @@ const navItems: { id: Page; label: string; icon: React.FC<any> }[] = [
   { id: 'fingerprint', label: 'Fingerprint', icon: Fingerprint },
   { id: 'traffic', label: 'Traffic', icon: Activity },
   { id: 'proxy', label: 'Proxy', icon: ShieldAlert },
+  { id: 'enumeration', label: 'Enumeration', icon: Search },
   { id: 'history', label: 'History', icon: History },
   { id: 'reports', label: 'Reports', icon: FileText },
   { id: 'settings', label: 'Settings', icon: Settings },

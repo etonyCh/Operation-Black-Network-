@@ -13,6 +13,7 @@ import { ProxyPage } from './pages/ProxyPage'
 import { HistoryPage } from './pages/HistoryPage'
 import { ReportsPage } from './pages/ReportsPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { EnumerationPage } from './pages/EnumerationPage'
 import { SetupOverlay } from './components/ui/SetupOverlay'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       case 'fingerprint': return <FingerprintPage />
       case 'traffic': return <TrafficPage />
       case 'proxy': return <ProxyPage />
+      case 'enumeration': return <EnumerationPage />
       case 'history': return <HistoryPage />
       case 'reports': return <ReportsPage />
       case 'settings': return <SettingsPage />

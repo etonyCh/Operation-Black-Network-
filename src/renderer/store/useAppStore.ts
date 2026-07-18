@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type Page = 'network-map' | 'fingerprint' | 'traffic' | 'proxy' | 'history' | 'settings' | 'reports'
+export type Page = 'network-map' | 'fingerprint' | 'traffic' | 'proxy' | 'history' | 'settings' | 'reports' | 'enumeration'
 
 interface AppState {
   currentPage: Page

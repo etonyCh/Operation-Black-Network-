@@ -35,6 +35,12 @@ const ALLOWED_RECEIVE_CHANNELS: readonly string[] = [
   'dependency:install:error',
   // Background AI analysis pushed without an invoke request
   'ai:background-analysis',
+  'sota:enum-dir-result',
+  'sota:enum-dir-progress',
+  'sota:enum-dir-complete',
+  'sota:enum-dns-result',
+  'sota:enum-dns-progress',
+  'sota:enum-dns-complete',
 ]
 
 // ── Expose API to renderer ────────────────────────────────────────────────────
@@ -99,6 +105,19 @@ contextBridge.exposeInMainWorld('api', {
 
   getAgentAuditLogs: () =>
     ipcRenderer.invoke('sota:get-logs'),
+
+  // ── Enumeration ───────────────────────────────────────────────────────────
+  startDirectoryEnum: (payload: { targetUrl: string; customWordlist?: string[] }) =>
+    ipcRenderer.invoke('sota:enum-start-dir', payload),
+
+  stopDirectoryEnum: (payload: { scanId: string }) =>
+    ipcRenderer.invoke('sota:enum-stop-dir', payload),
+
+  startDnsEnum: (payload: { domain: string }) =>
+    ipcRenderer.invoke('sota:enum-start-dns', payload),
+
+  stopDnsEnum: (payload: { scanId: string }) =>
+    ipcRenderer.invoke('sota:enum-stop-dns', payload),
 
   // ── Reports ───────────────────────────────────────────────────────────────
   generateReport: (options: unknown) => ipcRenderer.invoke(IPC.REPORT_GENERATE, { options }),

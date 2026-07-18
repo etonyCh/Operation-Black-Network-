@@ -145,6 +145,12 @@ export interface BlackNetworkAPI {
     pddlRule?: string
   }[]>
 
+  // ── Enumeration ───────────────────────────────────────────────────────────
+  startDirectoryEnum: (payload: { targetUrl: string; customWordlist?: string[] }) => Promise<{ success: boolean; scanId?: string; error?: string }>
+  stopDirectoryEnum: (payload: { scanId: string }) => Promise<{ success: boolean }>
+  startDnsEnum: (payload: { domain: string }) => Promise<{ success: boolean; scanId?: string; error?: string }>
+  stopDnsEnum: (payload: { scanId: string }) => Promise<{ success: boolean }>
+
   // ── Reports ───────────────────────────────────────────────────────────────
   generateReport: (options: ReportOptions) => Promise<ReportResult>
 

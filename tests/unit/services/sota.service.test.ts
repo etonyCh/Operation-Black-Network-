@@ -93,7 +93,7 @@ describe('SotaService', () => {
     it('triggers CTEM simulations and logs results in SQLite', async () => {
       const sim = await sotaService.runCtemSimulation('arp-spoof', '192.168.1.10')
       expect(sim.success).toBe(true)
-      expect(sim.message).toContain('Simulation ARP Spoof')
+      expect(sim.message).toContain("Audit d'interception ARP lancé")
 
       const logs = sotaService.getAgentAuditLogs()
       expect(logs.length).toBeGreaterThanOrEqual(2)

@@ -6,6 +6,7 @@ import { registerProxyHandlers } from './proxy.handler'
 import { registerAIHandlers } from './ai.handler'
 import { registerReportHandlers } from './report.handler'
 import { registerSessionHandlers } from './session.handler'
+import { registerEnumerationHandlers } from './enumeration.handler'
 import { checkAllDependencies } from '@main/utils/permissions'
 import { arpScanService } from '@main/services/arp-scan.service'
 import { IPC } from '@shared/types/ipc.types'
@@ -127,5 +128,6 @@ export function registerAllHandlers(): void {
   registerAIHandlers(ipcMain)
   registerReportHandlers(ipcMain)
   registerSessionHandlers(ipcMain)
+  registerEnumerationHandlers(ipcMain)
   logger.info('[ipc] all handlers registered')
 }
